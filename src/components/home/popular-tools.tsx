@@ -7,28 +7,28 @@ export function PopularTools() {
   const popularToolsConfig = POPULAR_TOOLS.map(id => TOOLS.find(t => t.id === id)).filter(Boolean) as ToolConfig[];
 
   return (
-    <section className="px-4 py-12 bg-white">
-      <div className="container mx-auto max-w-6xl">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <section className="px-4 py-16 md:py-24 bg-white">
+      <div className="container mx-auto max-w-[1200px]">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {popularToolsConfig.map((tool) => (
             <Link
               key={tool.id}
               href={tool.slug}
-              className="group relative flex flex-col gap-4 overflow-hidden rounded-2xl border bg-card p-6 shadow-sm transition-all hover:border-primary/50 hover:shadow-md"
+              className="group relative flex flex-col gap-5 rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
             >
-              <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${tool.colorAccent || "bg-primary/10 text-primary"}`}>
-                <tool.icon className="h-6 w-6" />
+              <div className={`flex h-14 w-14 items-center justify-center rounded-xl transition-colors ${tool.colorAccent ? tool.colorAccent.replace('bg-', 'bg-').replace('/10', '/10 group-hover:bg-').replace(' text-', '/20 text-') : "bg-primary/5 text-primary group-hover:bg-primary/10"}`}>
+                <tool.icon className="h-7 w-7" />
               </div>
               <div>
-                <h3 className="mb-1 text-xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
+                <h3 className="mb-2 text-lg font-bold tracking-tight text-slate-900 group-hover:text-primary transition-colors">
                   {tool.name}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-slate-500 leading-relaxed line-clamp-2">
                   {tool.description}
                 </p>
               </div>
-              <div className="mt-auto pt-2 flex justify-end">
-                <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors group-hover:translate-x-1" />
+              <div className="mt-auto pt-4 flex justify-end">
+                <ArrowRight className="h-5 w-5 text-slate-300 transition-all duration-200 group-hover:translate-x-1 group-hover:text-primary" />
               </div>
             </Link>
           ))}

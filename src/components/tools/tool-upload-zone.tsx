@@ -68,34 +68,37 @@ export function ToolUploadZone({
     <div
       {...getRootProps()}
       className={cn(
-        "relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 transition-all",
+        "relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 transition-all duration-300",
         isDragActive
-          ? "border-primary bg-primary/10 shadow-[0_0_40px_-10px_rgba(37,99,235,0.3)] scale-[1.02]"
-          : "border-primary/30 bg-primary/5 hover:bg-primary/10 hover:border-primary/50"
+          ? "border-primary bg-blue-50/80 shadow-[0_0_40px_-10px_rgba(37,99,235,0.2)] scale-[1.02]"
+          : "border-slate-300 bg-slate-50/50 hover:bg-blue-50/30 hover:border-primary/40"
       )}
     >
       <input {...getInputProps()} />
-      <div className="mb-6 rounded-full bg-white p-4 shadow-sm ring-1 ring-black/5">
+      <div className="mb-6 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 text-primary">
         {renderIcon()}
       </div>
-      <h3 className="mb-1 text-2xl font-bold tracking-tight text-foreground">{title}</h3>
-      <p className="mb-6 text-sm text-muted-foreground">{subtitle}</p>
+      <h3 className="mb-2 text-2xl font-extrabold tracking-tight text-slate-900">{title}</h3>
+      <p className="mb-8 text-base text-slate-500 font-medium">{subtitle}</p>
       
-      <div className="mb-8 rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-md transition-transform hover:scale-105 active:scale-95">
+      <div className="mb-8 rounded-xl bg-primary px-8 py-3.5 text-base font-bold text-white shadow-md transition-transform hover:-translate-y-0.5 hover:shadow-lg hover:bg-primary/90">
         {buttonText}
       </div>
 
-      <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+      <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
         {helperText && (
           <>
-            <span className="flex items-center gap-1">
-              <div className="h-1.5 w-1.5 rounded-full bg-primary/60"></div>
+            <span className="flex items-center gap-1.5">
+              <div className="h-1.5 w-1.5 rounded-full bg-slate-300"></div>
               {helperText}
             </span>
-            <span className="text-border">•</span>
+            <span className="text-slate-300">•</span>
           </>
         )}
-        <span>Up to {maxSizeMB} MB</span>
+        <span className="flex items-center gap-1.5">
+          <div className="h-1.5 w-1.5 rounded-full bg-slate-300"></div>
+          Up to {maxSizeMB} MB
+        </span>
       </div>
     </div>
   );
