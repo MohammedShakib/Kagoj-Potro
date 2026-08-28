@@ -1,7 +1,7 @@
 # 📄 Kagoj Potro
 
 <div align="center">
-  <img src="public/kagoj-potro-full-logo-transparent.png" alt="Kagoj Potro Banner" width="400" />
+  <img src="public/kagoj%20potro%20full%20logo.png" alt="Kagoj Potro Banner" width="400" />
 </div>
 
 **Kagoj Potro** is a blazing-fast, privacy-first PDF and document utility platform built for the modern web. Every tool runs directly inside your browser using WebAssembly and Web Workers—meaning your sensitive documents **never leave your device**.
