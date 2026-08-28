@@ -1,8 +1,11 @@
 import type { FutureToolConfig, ToolConfig } from "@/types/tools";
+import { KAGOJ_ICONS } from "@/components/kagoj-icons";
 
 const IMAGE_ICON_TONE = "bg-transparent ring-0 shadow-none";
+const SVG_ICON_TONE = "bg-blue-50 text-blue-600 ring-blue-100";
 
 export const TOOLS: ToolConfig[] = [
+  // --- CONVERT ---
   {
     id: "pdf-to-jpg",
     name: "PDF to JPG",
@@ -40,6 +43,19 @@ export const TOOLS: ToolConfig[] = [
     badge: "Convert",
   },
   {
+    id: "image-converter",
+    name: "Image Converter",
+    slug: "/tools/image-converter",
+    description: "Convert images between JPG, PNG, and WebP in bulk.",
+    icon: KAGOJ_ICONS.pdfToPng, // Reusing existing icon style for image conversion, or we can use a generic picture one if it existed. pdfToPng is fine as a fallback since it has a picture tile.
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Convert",
+    enabled: true,
+    badge: "Images",
+  },
+
+  // --- ORGANIZE ---
+  {
     id: "merge-pdf",
     name: "Merge PDF",
     slug: "/tools/merge-pdf",
@@ -75,9 +91,73 @@ export const TOOLS: ToolConfig[] = [
     enabled: true,
     badge: "Organize",
   },
+  {
+    id: "organize-pdf",
+    name: "Organize PDF",
+    slug: "/tools/organize-pdf",
+    description: "Sort, add, rotate, and delete pages from your PDF.",
+    icon: KAGOJ_ICONS.organizePdf,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Organize",
+    enabled: true,
+    badge: "Organize",
+  },
+  {
+    id: "extract-pages",
+    name: "Extract Pages",
+    slug: "/tools/extract-pages",
+    description: "Get a new document containing only the desired pages.",
+    icon: KAGOJ_ICONS.extractPages,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Organize",
+    enabled: true,
+    badge: "Organize",
+  },
+  {
+    id: "delete-pages",
+    name: "Delete Pages",
+    slug: "/tools/delete-pages",
+    description: "Remove unnecessary pages from your PDF.",
+    icon: KAGOJ_ICONS.organizePdf, // using organize icon for delete as well, since there isn't a dedicated delete icon in KAGOJ_ICONS
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Organize",
+    enabled: true,
+    badge: "Organize",
+  },
+
+  // --- EDIT ---
+  {
+    id: "page-numbers",
+    name: "Page Numbers",
+    slug: "/tools/page-numbers",
+    description: "Add page numbers into PDFs with custom formatting.",
+    icon: KAGOJ_ICONS.pageNumbers,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Edit",
+    enabled: true,
+    badge: "Edit",
+  },
+  {
+    id: "watermark-pdf",
+    name: "Watermark PDF",
+    slug: "/tools/watermark-pdf",
+    description: "Stamp an image or text over your PDF in seconds.",
+    icon: KAGOJ_ICONS.watermarkPdf,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Edit",
+    enabled: true,
+    badge: "Edit",
+  },
 ];
 
-export const POPULAR_TOOLS = ["pdf-to-jpg", "image-to-pdf", "merge-pdf", "split-pdf"];
+export const POPULAR_TOOLS = [
+  "pdf-to-jpg",
+  "merge-pdf",
+  "split-pdf",
+  "organize-pdf",
+  "image-to-pdf",
+  "watermark-pdf",
+];
 
 export const FUTURE_TOOLS: FutureToolConfig[] = [
   {

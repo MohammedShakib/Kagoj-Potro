@@ -12,11 +12,11 @@ export function DashboardGrid() {
 
   const filteredTools = TOOLS.filter((tool) => {
     if (activeTab === "All") return true;
-    if (activeTab === "Images") return tool.id === "pdf-to-jpg" || tool.id === "pdf-to-png" || tool.id === "image-to-pdf";
+    if (activeTab === "Images") return tool.id === "pdf-to-jpg" || tool.id === "pdf-to-png" || tool.id === "image-to-pdf" || tool.id === "image-converter";
     return tool.category === activeTab;
   });
 
-  const tabs = ["All", "Convert", "Organize", "Images"] as const;
+  const tabs = ["All", "Convert", "Organize", "Edit", "Images"] as const;
 
   return (
     <section className="relative z-10 bg-slate-50 px-4 pb-16 pt-3 md:pb-20" id="tools">

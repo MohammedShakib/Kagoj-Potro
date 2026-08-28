@@ -27,7 +27,7 @@ export function ComingSoonTools() {
                   imageClassName={tool.iconImageClassName}
                   size="sm"
                 />
-                <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                <span className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full border border-slate-200 bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">
                   Coming Soon
                 </span>
               </div>
