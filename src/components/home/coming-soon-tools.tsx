@@ -19,7 +19,14 @@ export function ComingSoonTools() {
               className="flex h-full flex-col rounded-2xl border border-slate-200 bg-slate-50/80 p-4 shadow-sm"
             >
               <div className="mb-4 flex items-start justify-between gap-3">
-                <ToolIcon icon={tool.icon} toneClassName={tool.iconToneClassName} size="sm" />
+                <ToolIcon
+                  icon={tool.icon}
+                  iconSrc={tool.iconSrc}
+                  iconAlt={tool.iconAlt ?? tool.name}
+                  toneClassName={tool.iconToneClassName}
+                  imageClassName={tool.iconImageClassName}
+                  size="sm"
+                />
                 <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
                   Coming Soon
                 </span>

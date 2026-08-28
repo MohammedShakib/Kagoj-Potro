@@ -3,23 +3,27 @@ import type { KagojIconProps } from "@/components/kagoj-icons";
 
 export type ToolCategory = "Convert" | "Organize" | "Edit" | "Optimize";
 
-export interface ToolConfig {
+interface ToolGraphic {
+  icon?: ComponentType<KagojIconProps>;
+  iconSrc?: string;
+  iconAlt?: string;
+  iconToneClassName?: string;
+  iconImageClassName?: string;
+}
+
+export interface ToolConfig extends ToolGraphic {
   id: string;
   name: string;
   slug: string;
   description: string;
-  icon: ComponentType<KagojIconProps>;
   category: ToolCategory;
   enabled: boolean;
-  iconToneClassName: string;
   badge?: string;
 }
 
-export interface FutureToolConfig {
+export interface FutureToolConfig extends ToolGraphic {
   id: string;
   name: string;
   category: ToolCategory;
   description: string;
-  icon: ComponentType<KagojIconProps>;
-  iconToneClassName: string;
 }

@@ -23,7 +23,14 @@ export function PlatformGrowth() {
               <ul className="space-y-3 pt-2">
                 {showcaseTools.map((tool) => (
                   <li key={tool.id} className="flex items-center gap-3 text-slate-700">
-                    <ToolIcon icon={tool.icon} toneClassName={tool.iconToneClassName} size="sm" />
+                    <ToolIcon
+                      icon={tool.icon}
+                      iconSrc={tool.iconSrc}
+                      iconAlt={tool.iconAlt ?? tool.name}
+                      toneClassName={tool.iconToneClassName}
+                      imageClassName={tool.iconImageClassName}
+                      size="sm"
+                    />
                     <span className="font-semibold">{tool.name}</span>
                   </li>
                 ))}
@@ -41,7 +48,14 @@ export function PlatformGrowth() {
                       }`}
                     >
                       <div className="mb-6 flex items-center justify-between">
-                        <ToolIcon icon={tool.icon} toneClassName={tool.iconToneClassName} size="lg" />
+                        <ToolIcon
+                          icon={tool.icon}
+                          iconSrc={tool.iconSrc}
+                          iconAlt={tool.iconAlt ?? tool.name}
+                          toneClassName={tool.iconToneClassName}
+                          imageClassName={tool.iconImageClassName}
+                          size="lg"
+                        />
                         <div className="flex gap-1">
                           <span className="h-2 w-2 rounded-full bg-slate-200" />
                           <span className="h-2 w-2 rounded-full bg-slate-200" />

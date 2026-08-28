@@ -1,28 +1,41 @@
 import type { ComponentType } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { KagojIconProps } from "@/components/kagoj-icons";
 
 type ToolIconSize = "sm" | "md" | "lg";
 
 const sizeClasses: Record<ToolIconSize, string> = {
-  sm: "h-10 w-10 rounded-[1rem] [&_svg]:h-[22px] [&_svg]:w-[22px]",
-  md: "h-12 w-12 rounded-[1.1rem] [&_svg]:h-6 [&_svg]:w-6",
-  lg: "h-14 w-14 rounded-[1.2rem] [&_svg]:h-7 [&_svg]:w-7",
+  sm: "h-10 w-10 rounded-[1rem]",
+  md: "h-12 w-12 rounded-[1.1rem]",
+  lg: "h-14 w-14 rounded-[1.2rem]",
+};
+
+const svgSizeClasses: Record<ToolIconSize, string> = {
+  sm: "h-[22px] w-[22px]",
+  md: "h-6 w-6",
+  lg: "h-7 w-7",
 };
 
 interface ToolIconProps {
-  icon: ComponentType<KagojIconProps>;
-  toneClassName: string;
+  icon?: ComponentType<KagojIconProps>;
+  iconSrc?: string;
+  iconAlt?: string;
+  toneClassName?: string;
   className?: string;
   iconClassName?: string;
+  imageClassName?: string;
   size?: ToolIconSize;
 }
 
 export function ToolIcon({
   icon: Icon,
+  iconSrc,
+  iconAlt,
   toneClassName,
   className,
   iconClassName,
+  imageClassName,
   size = "md",
 }: ToolIconProps) {
   return (
@@ -34,7 +47,17 @@ export function ToolIcon({
         className,
       )}
     >
-      <Icon className={cn("shrink-0", iconClassName)} />
+      {iconSrc ? (
+        <Image
+          src={iconSrc}
+          alt={iconAlt ?? ""}
+          width={128}
+          height={128}
+          className={cn("h-full w-full scale-[1.14] object-contain", imageClassName)}
+        />
+      ) : Icon ? (
+        <Icon className={cn("shrink-0", svgSizeClasses[size], iconClassName)} />
+      ) : null}
     </div>
   );
 }

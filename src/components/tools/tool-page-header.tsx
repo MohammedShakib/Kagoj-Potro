@@ -23,7 +23,14 @@ export function ToolPageHeader({ tool }: ToolPageHeaderProps) {
       </nav>
 
       <div className="flex flex-col items-center justify-center space-y-5">
-        <ToolIcon icon={tool.icon} toneClassName={tool.iconToneClassName} size="lg" />
+        <ToolIcon
+          icon={tool.icon}
+          iconSrc={tool.iconSrc}
+          iconAlt={tool.iconAlt ?? tool.name}
+          toneClassName={tool.iconToneClassName}
+          imageClassName={tool.iconImageClassName}
+          size="lg"
+        />
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
           {tool.name}
         </h1>

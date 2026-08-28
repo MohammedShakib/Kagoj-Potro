@@ -13,7 +13,13 @@ const ToolGrid = ({ tools }: { tools: ToolConfig[] }) => (
         className="group flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
       >
         <div className="flex items-start justify-between">
-          <ToolIcon icon={tool.icon} toneClassName={tool.iconToneClassName} />
+          <ToolIcon
+            icon={tool.icon}
+            iconSrc={tool.iconSrc}
+            iconAlt={tool.iconAlt ?? tool.name}
+            toneClassName={tool.iconToneClassName}
+            imageClassName={tool.iconImageClassName}
+          />
           <ArrowRight className="h-5 w-5 text-slate-300 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-1 group-hover:text-primary" />
         </div>
         <div>

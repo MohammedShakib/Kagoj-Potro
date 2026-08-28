@@ -49,9 +49,12 @@ export function DashboardGrid() {
               <div className="mb-4 flex items-start justify-between gap-4">
                 <ToolIcon
                   icon={tool.icon}
+                  iconSrc={tool.iconSrc}
+                  iconAlt={tool.iconAlt ?? tool.name}
                   toneClassName={tool.iconToneClassName}
+                  imageClassName={tool.iconImageClassName}
                   size="lg"
-                  className="group-hover:scale-[1.03] group-hover:shadow-sm"
+                  className="group-hover:scale-[1.03]"
                 />
                 <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">
                   {tool.badge ?? tool.category}

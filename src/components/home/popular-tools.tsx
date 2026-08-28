@@ -17,7 +17,14 @@ export function PopularTools() {
               href={tool.slug}
               className="group relative flex flex-col gap-5 rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
             >
-              <ToolIcon icon={tool.icon} toneClassName={tool.iconToneClassName} size="lg" />
+              <ToolIcon
+                icon={tool.icon}
+                iconSrc={tool.iconSrc}
+                iconAlt={tool.iconAlt ?? tool.name}
+                toneClassName={tool.iconToneClassName}
+                imageClassName={tool.iconImageClassName}
+                size="lg"
+              />
               <div>
                 <h3 className="mb-2 text-lg font-bold tracking-tight text-slate-900 group-hover:text-primary transition-colors">
                   {tool.name}
