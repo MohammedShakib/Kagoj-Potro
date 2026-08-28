@@ -13,7 +13,7 @@ import { rotatePdf } from "@/lib/pdf/rotate-pdf";
 import { saveAs } from "file-saver";
 import { sanitizeFileName } from "@/lib/utils/file-name";
 import { Card, CardContent } from "@/components/ui/card";
-import { RotateCw, RotateCcw, Rotate3d } from "lucide-react";
+import { Rotate3d, RotateCcw, RotateCw } from "lucide-react";
 
 export default function RotatePdfPage() {
   const tool = TOOLS.find((t) => t.id === "rotate-pdf")!;
@@ -28,12 +28,12 @@ export default function RotatePdfPage() {
   const handleFilesSelect = async (files: File[]) => {
     if (files.length === 0) return;
     const selectedFile = files[0];
-    
+
     setFile(selectedFile);
     setStatus("idle");
     setPdfBlob(null);
     setNumPages(null);
-    
+
     try {
       const { pdfjs } = await import("@/lib/pdf/pdf-worker");
       const arrayBuffer = await selectedFile.arrayBuffer();
@@ -58,7 +58,7 @@ export default function RotatePdfPage() {
         degrees: rotation,
         onProgress: (current, total) => {
           setProgress((current / total) * 100);
-        }
+        },
       });
 
       setPdfBlob(blob);
@@ -72,7 +72,7 @@ export default function RotatePdfPage() {
 
   const handleDownload = () => {
     if (!pdfBlob || !file) return;
-    
+
     try {
       const baseName = sanitizeFileName(file.name.replace(/\.pdf$/i, ""));
       saveAs(pdfBlob, `${baseName}-rotated.pdf`);
@@ -90,61 +90,61 @@ export default function RotatePdfPage() {
   };
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 sm:py-24">
+    <div className="container mx-auto max-w-3xl px-4 py-10 sm:py-14">
       <ToolPageHeader tool={tool} />
-      
-      <div className="mx-auto w-full max-w-3xl">
-        <Card className="overflow-hidden border-0 shadow-2xl shadow-primary/5 ring-1 ring-border">
-          <CardContent className="p-6 sm:p-10">
+
+      <div className="mx-auto w-full max-w-2xl">
+        <Card className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.05)]">
+          <CardContent className="p-5 sm:p-7">
             {!file && (
               <ToolUploadZone
                 onFilesSelect={handleFilesSelect}
                 accept={{ "application/pdf": [".pdf"] }}
                 maxSizeMB={100}
                 maxFiles={1}
-                title="Drop your PDF here"
+                title="Select PDF"
                 buttonText="Choose PDF"
-                helperText="PDF only"
+                helperText="PDF"
                 icon="pdf"
               />
             )}
 
             {file && status === "idle" && (
               <div className="space-y-6">
-                <SelectedFilesList
-                  files={[file]}
-                  onRemove={handleReset}
-                />
-                
-                <div className="space-y-4 rounded-xl border p-4 bg-muted/30">
-                  <p className="text-sm font-medium text-center mb-2">Select Rotation for All Pages</p>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Button 
+                <SelectedFilesList files={[file]} onRemove={handleReset} />
+
+                <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+                  <p className="mb-2 text-center text-sm font-medium text-slate-700">Select rotation</p>
+                  <div className="flex flex-col gap-4 sm:flex-row">
+                    <Button
                       variant={rotation === 90 ? "default" : "outline"}
-                      className="flex-1 h-12"
+                      className="h-11 flex-1"
                       onClick={() => setRotation(90)}
                     >
-                      <RotateCw className="mr-2 h-4 w-4" /> Right 90°
+                      <RotateCw className="mr-2 h-4 w-4" />
+                      Right 90°
                     </Button>
-                    <Button 
+                    <Button
                       variant={rotation === -90 ? "default" : "outline"}
-                      className="flex-1 h-12"
+                      className="h-11 flex-1"
                       onClick={() => setRotation(-90)}
                     >
-                      <RotateCcw className="mr-2 h-4 w-4" /> Left 90°
+                      <RotateCcw className="mr-2 h-4 w-4" />
+                      Left 90°
                     </Button>
-                    <Button 
+                    <Button
                       variant={rotation === 180 ? "default" : "outline"}
-                      className="flex-1 h-12"
+                      className="h-11 flex-1"
                       onClick={() => setRotation(180)}
                     >
-                      <Rotate3d className="mr-2 h-4 w-4" /> 180°
+                      <Rotate3d className="mr-2 h-4 w-4" />
+                      180°
                     </Button>
                   </div>
                 </div>
 
                 <Button
-                  className="w-full h-14 rounded-xl text-lg font-semibold"
+                  className="h-12 w-full rounded-xl text-base font-semibold"
                   size="lg"
                   onClick={handleConvert}
                   disabled={numPages === null}
@@ -155,17 +155,13 @@ export default function RotatePdfPage() {
             )}
 
             {status === "rotating" && (
-              <ProcessingState 
-                status={status} 
-                title="Rotating PDF..."
-                progress={progress} 
-              />
+              <ProcessingState status={status} title="Rotating PDF" progress={progress} />
             )}
 
             {status === "complete" && (
               <ResultCard
-                title="Your PDF is ready"
-                description={`Successfully rotated ${numPages} page${numPages === 1 ? '' : 's'}.`}
+                title="PDF ready"
+                description={`${numPages} page${numPages === 1 ? "" : "s"} rotated.`}
                 onDownload={handleDownload}
                 onReset={handleReset}
                 downloadText="Download PDF"

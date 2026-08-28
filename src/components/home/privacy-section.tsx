@@ -1,4 +1,3 @@
-import { LocalProcessingIcon, NoAccountIcon, NoStorageIcon } from "@/components/kagoj-icons";
 import { ToolIcon } from "@/components/kagoj-icons/tool-icon";
 
 export function PrivacySection() {
@@ -6,20 +5,20 @@ export function PrivacySection() {
     {
       title: "Local Processing",
       description: "Calculations happen directly on your device.",
-      icon: LocalProcessingIcon,
-      tone: "bg-blue-500 text-white ring-blue-200",
+      iconSrc: "/Icons/browser-processing.png",
+      iconAlt: "Local processing icon",
     },
     {
       title: "No Document Storage",
       description: "Your documents are not stored by Kagoj Potro.",
-      icon: NoStorageIcon,
-      tone: "bg-teal-500 text-white ring-teal-200",
+      iconSrc: "/Icons/no-document-storage.png",
+      iconAlt: "No document storage icon",
     },
     {
       title: "No Account Required",
       description: "Use the tools immediately without signup.",
-      icon: NoAccountIcon,
-      tone: "bg-indigo-500 text-white ring-indigo-200",
+      iconSrc: "/Icons/no-signup-required.png",
+      iconAlt: "No account required icon",
     },
   ];
 
@@ -42,10 +41,12 @@ export function PrivacySection() {
               className="rounded-[1.35rem] border border-slate-200 bg-slate-50/70 p-6 text-center shadow-[0_1px_2px_rgba(15,23,42,0.03)]"
             >
               <ToolIcon
-                icon={item.icon}
-                toneClassName={item.tone}
-                size="lg"
-                className="mx-auto mb-5"
+                iconSrc={item.iconSrc}
+                iconAlt={item.iconAlt}
+                toneClassName="bg-transparent ring-0 shadow-none"
+                imageClassName="scale-[1.24]"
+                size="xl"
+                className="mx-auto mb-5 h-16 w-16 rounded-none"
               />
               <h3 className="mb-2 text-lg font-semibold tracking-tight text-slate-900">{item.title}</h3>
               <p className="mx-auto max-w-xs text-sm leading-6 text-slate-600">{item.description}</p>

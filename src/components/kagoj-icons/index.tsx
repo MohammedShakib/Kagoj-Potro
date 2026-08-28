@@ -303,16 +303,21 @@ export function ProtectPdfIcon(props: KagojIconProps) {
 export function LocalProcessingIcon(props: KagojIconProps) {
   return (
     <BaseIcon {...props}>
-      <rect x="5.1" y="7.3" width="21.8" height="13.8" rx="3.8" fill="currentColor" fillOpacity="0.18" />
-      <path d="M11.6 24.6h8.8" />
-      <path d="M16 21.1v3.5" />
-      <path d="M10.3 13.8h5.2" />
-      <path d="M9.1 16.9h3.6" />
-      <rect x="18.2" y="10.7" width="5.8" height="5.8" rx="1.8" fill="currentColor" fillOpacity="0.18" />
-      <path d="M21.1 9v1.3" />
-      <path d="M21.1 16.9v1.3" />
-      <path d="M17.3 13.6h1.3" />
-      <path d="M24.9 13.6h1.3" />
+      <rect x="4.8" y="7" width="22.4" height="13.9" rx="3.8" fill="currentColor" fillOpacity="0.16" />
+      <path d="M9 11h14" />
+      <path d="M12.1 24.5h7.8" />
+      <path d="M16 20.9v3.6" />
+      <rect x="12.2" y="11.6" width="7.6" height="6.6" rx="1.8" fill="currentColor" fillOpacity="0.22" />
+      <path d="M14.5 13.8h3" />
+      <path d="M14.5 16h3" />
+      <path d="M10.7 13.3h1.2" />
+      <path d="M10.7 16.5h1.2" />
+      <path d="M20.1 13.3h1.2" />
+      <path d="M20.1 16.5h1.2" />
+      <path d="M14.2 10.1v1.3" />
+      <path d="M17.8 10.1v1.3" />
+      <path d="M14.2 18.4v1.3" />
+      <path d="M17.8 18.4v1.3" />
     </BaseIcon>
   );
 }
@@ -320,11 +325,12 @@ export function LocalProcessingIcon(props: KagojIconProps) {
 export function NoStorageIcon(props: KagojIconProps) {
   return (
     <BaseIcon {...props}>
-      <Sheet x={5.4} y={5.4} w={10.8} h={15.8} opacity={0.16} />
-      <ellipse cx="22.8" cy="11.3" rx="4.2" ry="2" fill="currentColor" fillOpacity="0.18" />
-      <path d="M18.6 11.3v7.6c0 1.1 1.9 2 4.2 2s4.2-.9 4.2-2v-7.6" />
-      <path d="M18.6 15.1c0 1.1 1.9 2 4.2 2s4.2-.9 4.2-2" />
-      <path d="M7.1 24.7 25.9 6.3" />
+      <ellipse cx="16" cy="9.4" rx="6.3" ry="2.5" fill="currentColor" fillOpacity="0.18" />
+      <path d="M9.7 9.4V18c0 1.5 2.8 2.7 6.3 2.7s6.3-1.2 6.3-2.7V9.4" />
+      <path d="M9.7 13.8c0 1.5 2.8 2.7 6.3 2.7s6.3-1.2 6.3-2.7" />
+      <path d="M9.7 18.1c0 1.5 2.8 2.7 6.3 2.7s6.3-1.2 6.3-2.7" />
+      <path d="M7 24.6 25 6.6" />
+      <path d="M22.7 8.8l1.9-1.8" />
     </BaseIcon>
   );
 }
@@ -332,9 +338,12 @@ export function NoStorageIcon(props: KagojIconProps) {
 export function NoAccountIcon(props: KagojIconProps) {
   return (
     <BaseIcon {...props}>
-      <circle cx="12.8" cy="11.8" r="4.4" fill="currentColor" fillOpacity="0.18" />
-      <path d="M6.7 23.2c1.1-3.4 3.6-5.2 6.1-5.2 2.6 0 5 1.8 6.1 5.2" />
-      <circle cx="23.1" cy="20.4" r="3.7" fill="currentColor" fillOpacity="0.18" />
+      <rect x="6.1" y="8" width="15.4" height="10.8" rx="3" fill="currentColor" fillOpacity="0.16" />
+      <circle cx="11.1" cy="12.3" r="2.2" fill="currentColor" fillOpacity="0.24" />
+      <path d="M8.7 17c.7-1.7 1.8-2.5 3-2.5 1.1 0 2.2.8 2.9 2.5" />
+      <path d="M16 11.4h3.2" />
+      <path d="M16 14.8h4.3" />
+      <circle cx="23.1" cy="20.3" r="3.7" fill="currentColor" fillOpacity="0.18" />
       <path d="m21.3 20.4 1.2 1.2 2.3-2.4" />
     </BaseIcon>
   );
@@ -343,11 +352,11 @@ export function NoAccountIcon(props: KagojIconProps) {
 export function FastIcon(props: KagojIconProps) {
   return (
     <BaseIcon {...props}>
-      <Sheet x={7.1} y={5.2} w={12.8} h={18.9} opacity={0.16} />
-      <path d="M4.9 12.1h4.4" />
-      <path d="M4.2 15.8h3.8" />
-      <path d="M5.2 19.4h4.4" />
-      <path d="m19.7 12 3.2.1-1.9 4h3.1l-5.1 7.7 1.1-5.2h-3Z" fill="currentColor" fillOpacity="0.18" />
+      <path d="M5.1 12.1h7" />
+      <path d="M4.4 16h5.4" />
+      <path d="M5.5 19.9h6.2" />
+      <circle cx="17.4" cy="16.1" r="7.3" fill="currentColor" fillOpacity="0.16" />
+      <path d="m16.6 10.1 4.3.2-2.4 4.7h3.5l-6.8 7.2 1.8-5.2h-3.7Z" fill="currentColor" fillOpacity="0.24" />
     </BaseIcon>
   );
 }
@@ -355,13 +364,18 @@ export function FastIcon(props: KagojIconProps) {
 export function PrivateIcon(props: KagojIconProps) {
   return (
     <BaseIcon {...props}>
-      <Sheet x={6.9} y={5} w={12.9} h={19.4} opacity={0.16} />
       <path
-        d="M22.4 14.8c1.8 0 3.4-.5 4.7-1.5 0 4.7-1.7 7.6-4.7 9.3-3.1-1.7-4.8-4.6-4.8-9.3 1.3 1 2.9 1.5 4.8 1.5Z"
+        d="M16 6.2c3 2.2 6.1 3.4 9.3 3.7v5.4c0 6.2-3.6 9.9-9.3 11.9-5.7-2-9.3-5.7-9.3-11.9V9.9c3.2-.3 6.3-1.5 9.3-3.7Z"
         fill="currentColor"
-        fillOpacity="0.18"
+        fillOpacity="0.16"
       />
-      <path d="m20.8 19.3 1.2 1.2 2.5-2.5" />
+      <path
+        d="M16 10.3c2 1.5 4 2.3 6.1 2.5v3c0 4.3-2.4 6.9-6.1 8.3-3.8-1.4-6.1-4-6.1-8.3v-3c2.1-.2 4.1-1 6.1-2.5Z"
+        fill="currentColor"
+        fillOpacity="0.24"
+      />
+      <rect x="12.6" y="15.2" width="6.8" height="5.6" rx="1.8" />
+      <path d="M14.3 15.1v-1a1.7 1.7 0 1 1 3.4 0v1" />
     </BaseIcon>
   );
 }
@@ -369,10 +383,10 @@ export function PrivateIcon(props: KagojIconProps) {
 export function SimpleIcon(props: KagojIconProps) {
   return (
     <BaseIcon {...props}>
-      <Sheet x={7} y={5.2} w={13.2} h={18.9} opacity={0.16} />
-      <path d="M11.3 13.1h6.2" />
-      <path d="M11.3 17h8.5" />
-      <path d="M22.9 9.3 24 11.5l2.4 1.2-2.4 1.1-1.1 2.3-1.1-2.3-2.4-1.1 2.4-1.2Z" fill="currentColor" fillOpacity="0.18" />
+      <rect x="7.1" y="8.5" width="17.8" height="4.2" rx="2.1" fill="currentColor" fillOpacity="0.18" />
+      <rect x="7.1" y="14.6" width="13.6" height="4" rx="2" fill="currentColor" fillOpacity="0.18" />
+      <rect x="7.1" y="20.3" width="10" height="4" rx="2" fill="currentColor" fillOpacity="0.18" />
+      <path d="M22.3 8.2 23.5 11l2.8 1.3-2.8 1.3-1.2 2.7-1.3-2.7-2.8-1.3L21 11Z" fill="currentColor" fillOpacity="0.24" />
     </BaseIcon>
   );
 }

@@ -42,7 +42,7 @@ export function WorkYourWay() {
               <ToolIcon
                 icon={item.icon}
                 toneClassName={item.tone}
-                size="lg"
+                size="xl"
                 className="mx-auto mb-5"
               />
               <h3 className="mb-2 text-lg font-semibold text-slate-900">{item.title}</h3>

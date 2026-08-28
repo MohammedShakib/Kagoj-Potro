@@ -1,22 +1,21 @@
-import { LocalProcessingIcon, NoAccountIcon, NoStorageIcon } from "@/components/kagoj-icons";
 import { ToolIcon } from "@/components/kagoj-icons/tool-icon";
 
 export function TrustSection() {
   const items = [
     {
       title: "Browser Processing",
-      icon: LocalProcessingIcon,
-      tone: "bg-blue-500 text-white ring-blue-200",
+      iconSrc: "/Icons/browser-processing.png",
+      iconAlt: "Browser processing icon",
     },
     {
       title: "No Document Storage",
-      icon: NoStorageIcon,
-      tone: "bg-teal-500 text-white ring-teal-200",
+      iconSrc: "/Icons/no-document-storage.png",
+      iconAlt: "No document storage icon",
     },
     {
       title: "No Signup Required",
-      icon: NoAccountIcon,
-      tone: "bg-indigo-500 text-white ring-indigo-200",
+      iconSrc: "/Icons/no-signup-required.png",
+      iconAlt: "No signup required icon",
     },
   ];
 
@@ -36,7 +35,14 @@ export function TrustSection() {
               key={item.title}
               className="flex items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-4 text-left"
             >
-              <ToolIcon icon={item.icon} toneClassName={item.tone} size="sm" />
+              <ToolIcon
+                iconSrc={item.iconSrc}
+                iconAlt={item.iconAlt}
+                toneClassName="bg-transparent ring-0 shadow-none"
+                imageClassName="scale-[1.22]"
+                className="h-12 w-12 rounded-none"
+                size="md"
+              />
               <span className="text-sm font-semibold text-slate-800">{item.title}</span>
             </div>
           ))}

@@ -3,18 +3,20 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { KagojIconProps } from "@/components/kagoj-icons";
 
-type ToolIconSize = "sm" | "md" | "lg";
+type ToolIconSize = "sm" | "md" | "lg" | "xl";
 
 const sizeClasses: Record<ToolIconSize, string> = {
   sm: "h-10 w-10 rounded-[1rem]",
   md: "h-12 w-12 rounded-[1.1rem]",
   lg: "h-14 w-14 rounded-[1.2rem]",
+  xl: "h-16 w-16 rounded-[1.35rem]",
 };
 
 const svgSizeClasses: Record<ToolIconSize, string> = {
   sm: "h-[22px] w-[22px]",
   md: "h-6 w-6",
   lg: "h-7 w-7",
+  xl: "h-8 w-8",
 };
 
 interface ToolIconProps {

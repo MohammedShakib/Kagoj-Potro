@@ -13,13 +13,13 @@ export function ProcessingState({
   progress,
 }: ProcessingStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center space-y-6 py-8">
-      <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-primary/5 text-primary">
-        <Loader2 className="h-10 w-10 animate-spin" />
+    <div className="flex flex-col items-center justify-center space-y-5 py-6">
+      <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-primary/5 text-primary">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
       
-      <div className="w-full max-w-sm space-y-4 text-center">
-        <h3 className="text-xl font-semibold text-foreground">{title}</h3>
+      <div className="w-full max-w-sm space-y-3 text-center">
+        <h3 className="text-lg font-semibold text-foreground">{title}</h3>
         <p className="text-sm text-muted-foreground capitalize">{status.replace(/-/g, " ")}</p>
         
         {progress !== undefined && (

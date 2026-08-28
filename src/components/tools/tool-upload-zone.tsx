@@ -20,8 +20,8 @@ export function ToolUploadZone({
   accept,
   maxSizeMB = 100,
   maxFiles = 0,
-  title = "Drop your files here",
-  subtitle = "or click to choose files",
+  title = "Select your files",
+  subtitle = "",
   buttonText = "Choose Files",
   helperText,
   icon = "default",
@@ -58,7 +58,7 @@ export function ToolUploadZone({
   });
 
   const renderIcon = () => {
-    const className = cn("h-12 w-12 transition-colors", isDragActive ? "text-primary" : "text-primary/70");
+    const className = cn("h-11 w-11 transition-colors", isDragActive ? "text-primary" : "text-primary/75");
     if (icon === "pdf") return <File className={className} />;
     if (icon === "image") return <ImageIcon className={className} />;
     return <UploadCloud className={className} />;
@@ -68,38 +68,26 @@ export function ToolUploadZone({
     <div
       {...getRootProps()}
       className={cn(
-        "relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-10 py-16 md:py-20 transition-all duration-300",
+        "relative flex cursor-pointer flex-col items-center justify-center rounded-[1.75rem] border-2 border-dashed px-8 py-12 text-center transition-all duration-300 md:px-10 md:py-14",
         isDragActive
-          ? "border-primary bg-blue-50/80 shadow-[0_0_40px_-10px_rgba(37,99,235,0.2)] scale-[1.02]"
-          : "border-slate-300 bg-slate-50 hover:bg-blue-50/50 hover:border-primary/50"
+          ? "scale-[1.01] border-primary bg-blue-50/80 shadow-[0_0_40px_-10px_rgba(37,99,235,0.16)]"
+          : "border-slate-200 bg-slate-50/70 hover:border-primary/40 hover:bg-blue-50/40",
       )}
     >
       <input {...getInputProps()} />
-      <div className="mb-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200/50 text-primary">
+      <div className="mb-5 rounded-[1.35rem] bg-white p-5 text-primary shadow-sm ring-1 ring-slate-200/70">
         {renderIcon()}
       </div>
-      <h3 className="mb-2 text-2xl font-extrabold tracking-tight text-slate-900">{title}</h3>
-      <p className="mb-8 text-base text-slate-500 font-medium">{subtitle}</p>
-      
-      <div className="mb-8 rounded-xl bg-primary px-8 py-3.5 text-base font-bold text-white shadow-md transition-transform hover:-translate-y-0.5 hover:shadow-lg hover:bg-primary/90">
+      <h3 className="mb-5 text-[1.7rem] font-bold tracking-tight text-slate-900">{title}</h3>
+      {subtitle ? <p className="mb-5 text-sm font-medium text-slate-500">{subtitle}</p> : null}
+      <div className="rounded-xl bg-primary px-8 py-3.5 text-base font-semibold text-white shadow-md transition-transform hover:-translate-y-0.5 hover:bg-primary/90">
         {buttonText}
       </div>
-
-      <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
-        {helperText && (
-          <>
-            <span className="flex items-center gap-1.5">
-              <div className="h-1.5 w-1.5 rounded-full bg-slate-300"></div>
-              {helperText}
-            </span>
-            <span className="text-slate-300">•</span>
-          </>
-        )}
-        <span className="flex items-center gap-1.5">
-          <div className="h-1.5 w-1.5 rounded-full bg-slate-300"></div>
-          Up to {maxSizeMB} MB
-        </span>
-      </div>
+      {(helperText || maxSizeMB) ? (
+        <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+          {[helperText, `Up to ${maxSizeMB} MB`].filter(Boolean).join(" . ")}
+        </p>
+      ) : null}
     </div>
   );
 }

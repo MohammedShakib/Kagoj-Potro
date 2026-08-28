@@ -95,18 +95,18 @@ export default function ImageToPdfPage() {
   };
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 sm:py-24">
+    <div className="container mx-auto max-w-3xl px-4 py-10 sm:py-14">
       <ToolPageHeader tool={tool} />
       
-      <div className="mx-auto w-full max-w-3xl">
-        <Card className="overflow-hidden border-0 shadow-2xl shadow-primary/5 ring-1 ring-border">
-          <CardContent className="p-6 sm:p-10">
+      <div className="mx-auto w-full max-w-2xl">
+        <Card className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.05)]">
+          <CardContent className="p-5 sm:p-7">
             {files.length === 0 && (
               <ToolUploadZone
                 onFilesSelect={handleFilesSelect}
                 accept={{ "image/jpeg": [".jpg", ".jpeg"], "image/png": [".png"] }}
                 maxSizeMB={20}
-                title="Drop your images here"
+                title="Select images"
                 buttonText="Choose Images"
                 helperText="JPG, PNG"
                 icon="image"
@@ -131,7 +131,7 @@ export default function ImageToPdfPage() {
                     icon="image"
                   />
                   <Button
-                    className="w-full h-14 rounded-xl text-lg font-semibold sm:w-1/2 self-end"
+                    className="h-12 w-full self-end rounded-xl text-base font-semibold sm:w-1/2"
                     size="lg"
                     onClick={handleConvert}
                   >
