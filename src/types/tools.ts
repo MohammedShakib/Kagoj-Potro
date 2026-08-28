@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 import type { KagojIconProps } from "@/components/kagoj-icons";
 
-export type ToolCategory = "Convert" | "Organize" | "Edit" | "Optimize" | "Security";
+export type ToolCategory = "Convert" | "Organize" | "Edit" | "Optimize" | "Security" | "Images";
 
 interface ToolGraphic {
   icon?: ComponentType<KagojIconProps>;

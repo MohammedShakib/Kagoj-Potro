@@ -16,7 +16,7 @@ export function DashboardGrid() {
     return tool.category === activeTab;
   });
 
-  const tabs = ["All", "Convert", "Organize", "Edit", "Security", "Images"] as const;
+  const tabs = ["All", "Convert", "Organize", "Edit", "Optimize", "Security", "Images"] as const;
 
   return (
     <section className="relative z-10 bg-slate-50 px-4 pb-16 pt-3 md:pb-20" id="tools">

@@ -449,6 +449,27 @@ export function FillPdfIcon(props: KagojIconProps) {
   );
 }
 
+export function OcrPdfIcon(props: KagojIconProps) {
+  return (
+    <BaseIcon {...props}>
+      {/* Document Base */}
+      <Sheet x={6.6} y={5} w={13.2} h={19.6} opacity={0.12} />
+      {/* Scan Corners */}
+      <path d="M5 8v-3h3" />
+      <path d="M18.4 5h3v3" />
+      <path d="M5 21.6v3h3" />
+      <path d="M18.4 24.6h3v-3" />
+      {/* Scanning Beam (Line across the middle) */}
+      <path d="M3.5 14.8h19.4" strokeOpacity={0.4} />
+      {/* Small Text Lines representing recognized text */}
+      <path d="M9.5 9h7" />
+      <path d="M9.5 12h5" />
+      <path d="M9.5 18h7" />
+      <path d="M9.5 21h4" />
+    </BaseIcon>
+  );
+}
+
 export const KAGOJ_ICONS: Record<string, ComponentType<KagojIconProps>> = {
   pdfToJpg: PdfToJpgIcon,
   pdfToPng: PdfToPngIcon,
@@ -473,4 +494,5 @@ export const KAGOJ_ICONS: Record<string, ComponentType<KagojIconProps>> = {
   cropPdf: CropPdfIcon,
   unlockPdf: UnlockPdfIcon,
   fillPdf: FillPdfIcon,
+  ocrPdf: OcrPdfIcon,
 };

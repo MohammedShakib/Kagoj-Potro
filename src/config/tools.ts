@@ -218,26 +218,41 @@ export const TOOLS: ToolConfig[] = [
     enabled: true,
     badge: "Security",
   },
+  // --- OPTIMIZE ---
+  {
+    id: "compress-pdf",
+    name: "Compress PDF",
+    slug: "/tools/compress-pdf",
+    description: "Reduce PDF file size while keeping your document readable.",
+    icon: KAGOJ_ICONS.compressPdf,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Optimize",
+    enabled: true,
+    badge: "Optimize",
+  },
+  {
+    id: "ocr-pdf",
+    name: "OCR PDF",
+    slug: "/tools/ocr-pdf",
+    description: "Recognize text in scanned PDFs and create searchable documents.",
+    icon: KAGOJ_ICONS.ocrPdf,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Optimize",
+    enabled: true,
+    badge: "Optimize",
+  },
 ];
 
 export const POPULAR_TOOLS = [
   "merge-pdf",
+  "compress-pdf",
   "pdf-to-jpg",
   "organize-pdf",
-  "edit-pdf",
-  "sign-pdf"
+  "sign-pdf",
+  "ocr-pdf",
 ];
 
 export const FUTURE_TOOLS: FutureToolConfig[] = [
-  {
-    id: "compress-pdf",
-    name: "Compress PDF",
-    category: "Optimize",
-    description: "Reduce file size while keeping the document readable.",
-    iconSrc: "/Icons/compress-pdf.png",
-    iconAlt: "Compress PDF icon",
-    iconToneClassName: IMAGE_ICON_TONE,
-  },
   {
     id: "pdf-to-word",
     name: "PDF to Word",
