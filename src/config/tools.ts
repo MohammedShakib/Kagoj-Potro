@@ -148,15 +148,84 @@ export const TOOLS: ToolConfig[] = [
     enabled: true,
     badge: "Edit",
   },
+  {
+    id: "sign-pdf",
+    name: "Sign PDF",
+    slug: "/tools/sign-pdf",
+    description: "Add your electronic signature to a PDF document.",
+    icon: KAGOJ_ICONS.signPdf,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Edit",
+    enabled: true,
+    badge: "Edit",
+  },
+  {
+    id: "edit-pdf",
+    name: "Edit PDF",
+    slug: "/tools/edit-pdf",
+    description: "Add text, images, shapes, and signatures to your PDF.",
+    icon: KAGOJ_ICONS.editPdf,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Edit",
+    enabled: true,
+    badge: "Edit",
+  },
+  {
+    id: "fill-pdf",
+    name: "Fill PDF",
+    slug: "/tools/fill-pdf",
+    description: "Fill out interactive PDF forms (AcroForms) quickly and securely.",
+    icon: KAGOJ_ICONS.fillPdf,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Edit",
+    enabled: true,
+    badge: "Edit",
+  },
+
+  // --- ORGANIZE (Continued) ---
+  {
+    id: "crop-pdf",
+    name: "Crop PDF",
+    slug: "/tools/crop-pdf",
+    description: "Select an area to crop your PDF margins.",
+    icon: KAGOJ_ICONS.cropPdf,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Organize",
+    enabled: true,
+    badge: "Organize",
+  },
+
+  // --- SECURITY ---
+  {
+    id: "protect-pdf",
+    name: "Protect PDF",
+    slug: "/tools/protect-pdf",
+    description: "Encrypt your PDF with a password.",
+    icon: KAGOJ_ICONS.protectPdf,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Security",
+    enabled: true,
+    badge: "Security",
+  },
+  {
+    id: "unlock-pdf",
+    name: "Unlock PDF",
+    slug: "/tools/unlock-pdf",
+    description: "Remove password protection from your PDF.",
+    icon: KAGOJ_ICONS.unlockPdf,
+    iconToneClassName: SVG_ICON_TONE,
+    category: "Security",
+    enabled: true,
+    badge: "Security",
+  },
 ];
 
 export const POPULAR_TOOLS = [
-  "pdf-to-jpg",
   "merge-pdf",
-  "split-pdf",
+  "pdf-to-jpg",
   "organize-pdf",
-  "image-to-pdf",
-  "watermark-pdf",
+  "edit-pdf",
+  "sign-pdf"
 ];
 
 export const FUTURE_TOOLS: FutureToolConfig[] = [

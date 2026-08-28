@@ -391,6 +391,64 @@ export function SimpleIcon(props: KagojIconProps) {
   );
 }
 
+export function SignPdfIcon(props: KagojIconProps) {
+  return (
+    <BaseIcon {...props}>
+      <Sheet x={6.6} y={5} w={13.2} h={19.6} />
+      <path d="M10 18c2-1 3-3 5-1.5 1 1-1 3 2 3" />
+      <path d="m18 15 3-3-1.5-1.5-3 3" />
+    </BaseIcon>
+  );
+}
+
+export function EditPdfIcon(props: KagojIconProps) {
+  return (
+    <BaseIcon {...props}>
+      <Sheet x={6.6} y={5} w={13.2} h={19.6} />
+      <rect x="10" y="10" width="6.6" height="4.6" rx="1" fill="currentColor" fillOpacity="0.18" />
+      <path d="M10 17h6.6" />
+      <path d="M10 20h4" />
+    </BaseIcon>
+  );
+}
+
+export function CropPdfIcon(props: KagojIconProps) {
+  return (
+    <BaseIcon {...props}>
+      <Sheet x={6.6} y={5} w={13.2} h={19.6} />
+      <path d="M10.5 11v7.5h7.5" />
+      <path d="M15.5 19.5v-7.5h-7.5" />
+    </BaseIcon>
+  );
+}
+
+export function UnlockPdfIcon(props: KagojIconProps) {
+  return (
+    <BaseIcon {...props}>
+      <Sheet x={6.6} y={5} w={13.2} h={19.6} />
+      <path
+        d="M21.7 15.1c2 0 3.8-.6 5.1-1.7 0 5-1.8 8-5.1 9.9-3.4-1.9-5.2-4.9-5.2-9.9 1.3 1.1 3.2 1.7 5.2 1.7Z"
+        fill="currentColor"
+        fillOpacity="0.18"
+      />
+      <path d="M21.7 18.1v3.4" />
+      <path d="M20 17.2v-1.5a1.7 1.7 0 0 1 3.4 0" />
+    </BaseIcon>
+  );
+}
+
+export function FillPdfIcon(props: KagojIconProps) {
+  return (
+    <BaseIcon {...props}>
+      <Sheet x={6.6} y={5} w={13.2} h={19.6} />
+      <rect x="9.5" y="11" width="3.5" height="3.5" rx="0.8" fill="currentColor" fillOpacity="0.18" />
+      <path d="M14.5 12.7h5" />
+      <rect x="9.5" y="16" width="3.5" height="3.5" rx="0.8" fill="currentColor" fillOpacity="0.18" />
+      <path d="M14.5 17.7h5" />
+    </BaseIcon>
+  );
+}
+
 export const KAGOJ_ICONS: Record<string, ComponentType<KagojIconProps>> = {
   pdfToJpg: PdfToJpgIcon,
   pdfToPng: PdfToPngIcon,
@@ -410,4 +468,9 @@ export const KAGOJ_ICONS: Record<string, ComponentType<KagojIconProps>> = {
   fast: FastIcon,
   private: PrivateIcon,
   simple: SimpleIcon,
+  signPdf: SignPdfIcon,
+  editPdf: EditPdfIcon,
+  cropPdf: CropPdfIcon,
+  unlockPdf: UnlockPdfIcon,
+  fillPdf: FillPdfIcon,
 };
