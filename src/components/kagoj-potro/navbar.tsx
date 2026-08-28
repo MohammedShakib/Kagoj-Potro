@@ -14,7 +14,7 @@ export function Navbar() {
             height={861}
             className="h-9 w-auto sm:hidden"
           />
-          <span className="text-lg font-bold tracking-tight sm:hidden">Kagoj Potro</span>
+          <span className="text-lg font-bold tracking-tight sm:hidden text-primary">Kagoj Potro</span>
           <Image
             src="/kagoj-potro-full-logo-transparent.png"
             alt="Kagoj Potro"
@@ -24,16 +24,18 @@ export function Navbar() {
           />
         </Link>
         <nav className="flex items-center gap-6">
-          <Link href="#tools" className="text-sm font-medium hover:text-primary transition-colors hidden sm:block">
+          <Link href="#tools" className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
             Tools
           </Link>
-          <Link href="#privacy" className="text-sm font-medium hover:text-primary transition-colors hidden sm:block">
+          <Link href="#how-it-works" className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
+            How it Works
+          </Link>
+          <Link href="#privacy" className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
             Privacy
           </Link>
-          <Link href="#about" className="text-sm font-medium hover:text-primary transition-colors hidden sm:block">
-            About
+          <Link href="/" className={buttonVariants({ variant: "default", size: "sm" })}>
+            Convert PDF
           </Link>
-          <Link href="/" className={buttonVariants({ variant: "default", size: "sm" })}>Convert PDF</Link>
         </nav>
       </div>
     </header>

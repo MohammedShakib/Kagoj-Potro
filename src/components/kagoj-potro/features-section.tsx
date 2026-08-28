@@ -4,37 +4,43 @@ export function FeaturesSection() {
   const features = [
     {
       title: "Private by Design",
-      description: "Your files are processed directly in your browser. Nothing is uploaded to any server.",
+      description: "Files are processed in your browser. Nothing is uploaded to any server.",
       icon: ShieldCheck,
     },
     {
-      title: "High Quality",
-      description: "PDF pages are rendered at high resolution before JPG export.",
+      title: "High Quality JPGs",
+      description: "Each PDF page is rendered at high resolution for crystal-clear results.",
       icon: Image,
     },
     {
-      title: "Fast Downloads",
-      description: "Single pages download directly; multi-page PDFs are automatically packaged.",
+      title: "Fast Conversion",
+      description: "Convert instantly using your device's processing power, no waiting in line.",
       icon: Zap,
     },
     {
-      title: "No Signup",
-      description: "Use the converter immediately without any accounts or tracking.",
+      title: "No Signup Required",
+      description: "Start using the converter immediately without accounts or tracking.",
       icon: CheckCircle2,
     },
   ];
 
   return (
-    <section id="features" className="py-16">
-      <div className="container mx-auto px-4">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+    <section id="features" className="py-24 bg-white">
+      <div className="container mx-auto px-4 max-w-5xl">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Everything you need</h2>
+          <p className="mt-4 text-lg text-muted-foreground">Simple, fast, and completely secure.</p>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2">
           {features.map((feature, i) => (
-            <div key={i} className="flex flex-col items-center text-center">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <div key={i} className="flex gap-4 rounded-2xl border p-6 bg-slate-50/50 hover:bg-slate-50 transition-colors">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <feature.icon className="h-6 w-6" />
               </div>
-              <h3 className="mb-2 text-lg font-semibold">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground">{feature.description}</p>
+              <div>
+                <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+              </div>
             </div>
           ))}
         </div>
