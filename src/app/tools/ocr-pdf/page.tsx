@@ -1,153 +1,152 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
+import { RelatedTools } from "@/components/tools/related-tools";
+import { RemoteProcessingState } from "@/components/tools/remote-processing-state";
+import { ResultCard } from "@/components/tools/result-card";
 import { ToolPageHeader } from "@/components/tools/tool-page-header";
 import { ToolUploadZone } from "@/components/tools/tool-upload-zone";
-import { RelatedTools } from "@/components/tools/related-tools";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ResultCard } from "@/components/tools/result-card";
-import { sanitizeFileName } from "@/lib/utils/file-name";
-import { ShieldCheck, Loader2, Copy, Download as DownloadIcon } from "lucide-react";
-import { toast } from "sonner";
+import { useProcessingJob } from "@/hooks/use-processing-job";
+import { useProcessingTools } from "@/hooks/use-processing-tools";
+import { normalizeProcessingError } from "@/lib/processing-errors";
 import { TOOLS } from "@/config/tools";
+import type { ProcessingOcrLanguage } from "@/types/processing";
+import { Loader2, RefreshCcw, ServerCrash, ShieldCheck } from "lucide-react";
+import { toast } from "sonner";
 
-type OcrMode = "searchable" | "text";
-type Language = "eng" | "ben";
+const OCR_LANGUAGE_OPTIONS: Array<{ label: string; value: ProcessingOcrLanguage }> = [
+  { label: "English", value: "eng" },
+  { label: "Bangla / Bengali", value: "ben" },
+  { label: "English + Bangla", value: "eng+ben" },
+];
 
+function formatBytes(bytes?: number) {
+  if (bytes === undefined || Number.isNaN(bytes)) {
+    return "Unavailable";
+  }
+
+  if (bytes === 0) {
+    return "0 B";
+  }
+
+  const units = ["B", "KB", "MB", "GB"];
+  const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+  const value = bytes / 1024 ** exponent;
+
+  return `${value.toFixed(value >= 10 || exponent === 0 ? 0 : 1)} ${units[exponent]}`;
+}
+
+function getProcessingTitle(uiState: string) {
+  if (uiState === "validating") {
+    return "Validating PDF";
+  }
+
+  if (uiState === "uploading") {
+    return "Uploading PDF";
+  }
+
+  if (uiState === "queued") {
+    return "Waiting for OCR";
+  }
+
+  return "Running OCR";
+}
 
 export default function OcrPdfPage() {
-  const tool = TOOLS.find((t) => t.id === "ocr-pdf")!;
+  const tool = TOOLS.find((entry) => entry.id === "ocr-pdf")!;
   const [file, setFile] = useState<File | null>(null);
-  const [mode, setMode] = useState<OcrMode>("searchable");
-  const [language, setLanguage] = useState<Language>("eng");
-  
-  const [status, setStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
-  const [progressMsg, setProgressMsg] = useState("");
-  const [progressPercent, setProgressPercent] = useState(0);
-  
-  const [resultBlob, setResultBlob] = useState<{ blob: Blob; filename: string } | null>(null);
-  const [extractedText, setExtractedText] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [language, setLanguage] = useState<ProcessingOcrLanguage>("eng");
+  const {
+    tool: processingTool,
+    error: toolsError,
+    isLoading: isCheckingAvailability,
+    isSlow: isCheckingSlow,
+    retry,
+  } = useProcessingTools("ocr_pdf");
+  const {
+    cancelJob,
+    downloadResult,
+    error,
+    isBusy,
+    isCancelling,
+    isDownloading,
+    job,
+    reset,
+    slowMessage,
+    startJob,
+    uiState,
+  } = useProcessingJob();
 
-  // Clean up workers on unmount
-  useEffect(() => {
-    return () => {
-      import("@/lib/ocr/ocr-engine").then(({ terminateOcrWorker }) => {
-        terminateOcrWorker();
-      });
-    };
-  }, []);
+  const availableLanguages = (processingTool?.languages ?? ["eng"]).filter(
+    (candidate): candidate is ProcessingOcrLanguage =>
+      OCR_LANGUAGE_OPTIONS.some((option) => option.value === candidate),
+  );
+  const effectiveLanguage =
+    availableLanguages.includes(language)
+      ? language
+      : availableLanguages.includes("eng")
+        ? "eng"
+        : availableLanguages[0] ?? "eng";
+  const selectedLanguageLabel =
+    OCR_LANGUAGE_OPTIONS.find((option) => option.value === effectiveLanguage)?.label ?? "Selected language";
+  const result = job?.result;
+  const primaryArtifactKey = result?.primary_artifact ?? "searchable_pdf";
+  const primaryArtifact = result?.artifacts?.[primaryArtifactKey];
+  const outputSize = result?.output_size ?? primaryArtifact?.size;
 
   const handleFiles = (files: File[]) => {
-    if (files.length > 0) {
-      setFile(files[0]);
-      setStatus("idle");
-      setResultBlob(null);
-      setExtractedText("");
-      setErrorMsg("");
+    if (!files[0]) {
+      return;
     }
+
+    reset();
+    setFile(files[0]);
+  };
+
+  const handleStart = async () => {
+    if (!file || isBusy) {
+      return;
+    }
+
+    await startJob({
+      file,
+      options: {
+        clean: false,
+        deskew: true,
+        language: effectiveLanguage,
+        output_type: "searchable_pdf",
+      },
+      type: "ocr_pdf",
+    });
   };
 
   const handleCancel = async () => {
-    const { terminateOcrWorker } = await import("@/lib/ocr/ocr-engine");
-    await terminateOcrWorker();
-    setStatus("idle");
-    toast.info("OCR cancelled.");
-  };
-
-  const startOcr = async () => {
-    if (!file) return;
-    setStatus("processing");
-    setProgressMsg("Loading PDF...");
-    setProgressPercent(0);
-
     try {
-      const { pdfjs } = await import("@/lib/pdf/pdf-worker");
-      const { getOcrWorker, runOcr } = await import("@/lib/ocr/ocr-engine");
-      const { generateSearchablePdf } = await import("@/lib/ocr/searchable-pdf");
-      // Add type here locally
-      type OcrPageResultLocal = any;
-
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
-      const totalPages = pdf.numPages;
-
-      setProgressMsg("Initializing OCR Engine...");
-      const worker = await getOcrWorker(language, (statusText, percent) => {
-        // Tesseract internal loading progress
-        setProgressMsg(statusText);
-      });
-
-      const ocrResults: OcrPageResultLocal[] = [];
-      let fullText = "";
-
-      for (let i = 1; i <= totalPages; i++) {
-        setProgressMsg(`Processing page ${i} of ${totalPages}...`);
-        setProgressPercent(Math.round(((i - 1) / totalPages) * 100));
-
-        const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 2.0 }); // 2.0 for higher OCR fidelity
-        
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        if (!ctx) throw new Error("Could not create canvas context.");
-        
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        
-        await page.render({ canvasContext: ctx, viewport } as any).promise;
-
-        const ocrData = await runOcr(worker, canvas);
-
-        if (mode === "searchable") {
-          ocrResults.push({
-            pageIndex: i - 1,
-            ocrData: ocrData,
-            canvasWidth: canvas.width,
-            canvasHeight: canvas.height
-          });
-        } else {
-          fullText += `--- Page ${i} ---\n\n${ocrData.text}\n\n`;
-        }
-      }
-
-      setProgressPercent(100);
-      setProgressMsg("Finalizing...");
-
-      if (mode === "searchable") {
-        const newPdfBytes = await generateSearchablePdf(arrayBuffer, ocrResults);
-        const blob = new Blob([newPdfBytes as any], { type: "application/pdf" });
-        const newFilename = sanitizeFileName(file.name) + "-searchable.pdf";
-        setResultBlob({ blob, filename: newFilename });
-      } else {
-        setExtractedText(fullText);
-      }
-      
-      setStatus("success");
-      
-    } catch (err: any) {
-      console.error(err);
-      setStatus("error");
-      setErrorMsg(err.message || "An error occurred during OCR processing.");
+      const status = await cancelJob();
+      toast.info(status === "cancelled" ? "OCR cancelled." : "OCR cancellation requested.");
+    } catch (error) {
+      toast.error(normalizeProcessingError(error).message);
     }
   };
 
-  const copyText = () => {
-    navigator.clipboard.writeText(extractedText);
-    toast.success("Text copied to clipboard!");
+  const handleDownload = async () => {
+    try {
+      await downloadResult(primaryArtifactKey);
+      toast.success("Your searchable PDF download has started.");
+    } catch (error) {
+      toast.error(normalizeProcessingError(error).message);
+    }
   };
 
-  const downloadText = () => {
-    if (!file) return;
-    const blob = new Blob([extractedText], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = sanitizeFileName(file.name) + "-extracted-text.txt";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const resetToSetup = () => {
+    reset();
+  };
+
+  const resetAll = () => {
+    reset();
+    setFile(null);
   };
 
   return (
@@ -157,157 +156,247 @@ export default function OcrPdfPage() {
           <ToolPageHeader tool={tool} />
 
           <div className="mx-auto max-w-2xl">
-            {status === "idle" && !file && (
-              <ToolUploadZone
-                onFilesSelect={handleFiles}
-                accept={{ "application/pdf": [".pdf"] }}
-                maxFiles={1}
-                title="Upload scanned PDF"
-                subtitle="Files are processed locally in your browser"
-              />
-            )}
-
-            {status === "idle" && file && (
-              <div className="rounded-xl border bg-white p-6 shadow-sm">
-                <div className="mb-6 flex items-center justify-between rounded-lg bg-slate-50 p-4 border">
-                  <div>
-                    <h3 className="font-semibold text-slate-800">{file.name}</h3>
-                    <p className="text-sm text-slate-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                  </div>
-                  <Button variant="ghost" size="sm" onClick={() => setFile(null)}>
-                    Change File
-                  </Button>
+            {isCheckingAvailability ? (
+              <div className="rounded-xl border bg-white p-8 text-center shadow-sm">
+                <Loader2 className="mx-auto mb-6 h-12 w-12 animate-spin text-blue-600" />
+                <h3 className="mb-2 text-xl font-bold text-slate-900">Checking OCR availability</h3>
+                <p className="text-slate-500">
+                  We&apos;re confirming the processing server is awake and OCR support is enabled.
+                </p>
+                {isCheckingSlow ? (
+                  <p className="mt-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                    The processing server may be starting. This can take a moment on the first request.
+                  </p>
+                ) : null}
+              </div>
+            ) : toolsError ? (
+              <div className="rounded-xl border bg-white p-8 text-center shadow-sm">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
+                  <ServerCrash className="h-6 w-6" />
                 </div>
+                <h3 className="mb-2 text-xl font-bold text-slate-900">Processing server unavailable</h3>
+                <p className="mb-6 text-slate-600">{toolsError.message}</p>
+                <Button onClick={retry}>
+                  <RefreshCcw className="mr-2 h-4 w-4" />
+                  Retry
+                </Button>
+              </div>
+            ) : !processingTool?.enabled ? (
+              <div className="rounded-xl border bg-white p-8 text-center shadow-sm">
+                <h3 className="mb-2 text-xl font-bold text-slate-900">OCR PDF is not available right now</h3>
+                <p className="text-slate-600">
+                  The backend reported that OCR is currently disabled. Please try again later.
+                </p>
+              </div>
+            ) : (
+              <>
+                {uiState === "idle" && !file ? (
+                  <ToolUploadZone
+                    onFilesSelect={handleFiles}
+                    accept={{ "application/pdf": [".pdf"] }}
+                    maxFiles={1}
+                    title="Upload scanned PDF"
+                    subtitle="Your PDF will be sent to the Kagoj Processing Engine to create a searchable PDF."
+                    icon="pdf"
+                  />
+                ) : null}
 
-                <div className="space-y-6 mb-8">
-                  <div>
-                    <h4 className="font-medium text-slate-700 mb-3">Output Type</h4>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => setMode("searchable")}
-                        className={`p-4 rounded-lg border-2 transition-all text-left ${
-                          mode === "searchable" ? "border-blue-600 bg-blue-50" : "border-slate-200 hover:border-slate-300 bg-white"
-                        }`}
-                      >
-                        <div className="font-semibold text-slate-800">Searchable PDF</div>
-                        <div className="text-xs text-slate-500 mt-1">Keeps original look, adds invisible text layer.</div>
-                      </button>
-                      <button
-                        onClick={() => setMode("text")}
-                        className={`p-4 rounded-lg border-2 transition-all text-left ${
-                          mode === "text" ? "border-blue-600 bg-blue-50" : "border-slate-200 hover:border-slate-300 bg-white"
-                        }`}
-                      >
-                        <div className="font-semibold text-slate-800">Extract Text</div>
-                        <div className="text-xs text-slate-500 mt-1">Get plain text to copy or download.</div>
-                      </button>
+                {uiState === "idle" && file ? (
+                  <div className="rounded-xl border bg-white p-6 shadow-sm">
+                    <div className="mb-6 flex items-center justify-between rounded-lg border bg-slate-50 p-4">
+                      <div>
+                        <h3 className="font-semibold text-slate-800">{file.name}</h3>
+                        <p className="text-sm text-slate-500">{formatBytes(file.size)}</p>
+                      </div>
+                      <Button variant="ghost" size="sm" onClick={resetAll}>
+                        Change File
+                      </Button>
+                    </div>
+
+                    <div className="mb-6 space-y-6">
+                      <div>
+                        <h4 className="mb-3 font-medium text-slate-700">Output Type</h4>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="rounded-lg border-2 border-blue-600 bg-blue-50 p-4 text-left">
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="font-semibold text-slate-800">Searchable PDF</div>
+                              <Badge variant="secondary" className="border-none bg-blue-100 text-blue-700">
+                                Active
+                              </Badge>
+                            </div>
+                            <div className="mt-1 text-xs text-slate-500">
+                              Keeps the original layout and adds a searchable text layer.
+                            </div>
+                          </div>
+                          <div className="rounded-lg border-2 border-slate-200 bg-slate-50 p-4 text-left opacity-70">
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="font-semibold text-slate-700">Extract Text</div>
+                              <Badge variant="secondary" className="border-none bg-slate-200 text-slate-600">
+                                Not wired
+                              </Badge>
+                            </div>
+                            <div className="mt-1 text-xs text-slate-500">
+                              The current backend integration only supports searchable PDF output.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="mb-3 flex items-center justify-between gap-3">
+                          <h4 className="font-medium text-slate-700">Document Language</h4>
+                          <Badge variant="secondary" className="border-none bg-slate-100 text-slate-700">
+                            {availableLanguages.length} available
+                          </Badge>
+                        </div>
+                        <select
+                          value={effectiveLanguage}
+                          onChange={(event) => setLanguage(event.target.value as ProcessingOcrLanguage)}
+                          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        >
+                          {OCR_LANGUAGE_OPTIONS.filter((option) => availableLanguages.includes(option.value)).map(
+                            (option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ),
+                          )}
+                        </select>
+                        <p className="mt-2 text-xs text-slate-500">
+                          Choose the language that best matches the scanned document for better OCR accuracy.
+                        </p>
+                      </div>
+                    </div>
+
+                    <Button className="w-full" size="lg" onClick={() => void handleStart()} disabled={!file || isBusy}>
+                      Create Searchable PDF
+                    </Button>
+
+                    <div className="mt-4 flex items-center justify-center gap-2 text-sm text-slate-500">
+                      <ShieldCheck className="h-4 w-4 text-green-600" />
+                      <span>Files are processed by the deployed Kagoj Processing Engine.</span>
                     </div>
                   </div>
+                ) : null}
 
-                  <div>
-                    <h4 className="font-medium text-slate-700 mb-3">Document Language</h4>
-                    <select
-                      value={language}
-                      onChange={(e) => setLanguage(e.target.value as Language)}
-                      className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                    >
-                      <option value="eng">English</option>
-                      <option value="ben">Bangla / Bengali</option>
-                    </select>
-                    <p className="mt-2 text-xs text-slate-500">Choosing the correct language improves recognition accuracy.</p>
-                  </div>
-                </div>
-
-                <Button className="w-full h-12 text-base" size="lg" onClick={startOcr}>
-                  Run OCR
-                </Button>
-                
-                <div className="mt-4 flex items-center justify-center gap-2 text-sm text-slate-500">
-                  <ShieldCheck className="w-4 h-4 text-green-600" />
-                  <span>Processed locally in your browser.</span>
-                </div>
-              </div>
-            )}
-
-            {status === "processing" && (
-              <div className="rounded-xl border bg-white p-12 text-center shadow-sm">
-                <Loader2 className="mx-auto h-12 w-12 animate-spin text-blue-600 mb-6" />
-                <h3 className="text-xl font-bold text-slate-900 mb-2">Running OCR...</h3>
-                <p className="text-slate-500 mb-6">{progressMsg}</p>
-                <div className="w-full max-w-md mx-auto bg-slate-100 rounded-full h-3 overflow-hidden">
-                  <div 
-                    className="bg-blue-600 h-full transition-all duration-300 ease-out" 
-                    style={{ width: `${progressPercent}%` }}
-                  />
-                </div>
-                <p className="mt-2 text-sm font-medium text-blue-600">{progressPercent}%</p>
-                
-                <p className="mt-8 text-sm text-slate-400">Large or high-resolution PDFs can take several minutes to process.</p>
-                
-                <Button variant="outline" className="mt-6" onClick={handleCancel}>
-                  Cancel
-                </Button>
-              </div>
-            )}
-
-            {status === "success" && (
-              <div className="space-y-6">
-                {mode === "searchable" && resultBlob && (
-                  <ResultCard
-                    title="OCR Complete"
-                    description="Your searchable PDF is ready."
-                    blob={resultBlob.blob}
-                    filename={resultBlob.filename}
-                    onReset={() => {
-                      setFile(null);
-                      setStatus("idle");
-                      setResultBlob(null);
-                    }}
-                    downloadText="Download Searchable PDF"
+                {(uiState === "validating" ||
+                  uiState === "uploading" ||
+                  uiState === "queued" ||
+                  uiState === "processing") && (
+                  <RemoteProcessingState
+                    title={getProcessingTitle(uiState)}
+                    status={job?.status ?? uiState}
+                    progress={
+                      job?.progress ??
+                      (uiState === "validating" ? 5 : uiState === "uploading" ? 15 : uiState === "queued" ? 20 : 0)
+                    }
+                    stage={job?.stage ?? uiState}
+                    message={
+                      job?.message ??
+                      `Please keep this page open while OCR runs for the ${selectedLanguageLabel.toLowerCase()} model.`
+                    }
+                    slowMessage={slowMessage}
+                    onCancel={uiState === "queued" || uiState === "processing" ? handleCancel : undefined}
+                    cancelDisabled={isCancelling}
                   />
                 )}
 
-                {mode === "text" && (
-                  <div className="rounded-xl border bg-white p-6 shadow-sm">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-bold text-slate-800">Extracted Text</h3>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={copyText}>
-                          <Copy className="w-4 h-4 mr-2" /> Copy
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={downloadText}>
-                          <DownloadIcon className="w-4 h-4 mr-2" /> Download TXT
-                        </Button>
+                {uiState === "completed" && job ? (
+                  <div className="space-y-6">
+                    <div className="rounded-xl border bg-white p-6 shadow-sm">
+                      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <h3 className="text-lg font-bold text-slate-900">OCR Summary</h3>
+                          <p className="text-sm text-slate-500">
+                            {job.message || `${selectedLanguageLabel} OCR completed successfully.`}
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <Badge variant="secondary" className="border-none bg-slate-100 text-slate-700">
+                            Status: {job.status}
+                          </Badge>
+                          <Badge variant="secondary" className="border-none bg-blue-100 text-blue-700">
+                            Language: {selectedLanguageLabel}
+                          </Badge>
+                          {job.stage ? (
+                            <Badge variant="secondary" className="border-none bg-amber-100 text-amber-700">
+                              Stage: {job.stage}
+                            </Badge>
+                          ) : null}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                        <div className="rounded-lg border border-slate-100 bg-slate-50 p-4 text-center">
+                          <div className="text-sm text-slate-500">Input Size</div>
+                          <div className="mt-1 text-lg font-semibold text-slate-800">{formatBytes(file?.size)}</div>
+                        </div>
+                        <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 text-center">
+                          <div className="text-sm text-blue-600">Output Size</div>
+                          <div className="mt-1 text-lg font-bold text-blue-700">{formatBytes(outputSize)}</div>
+                        </div>
+                        <div className="rounded-lg border border-green-100 bg-green-50 p-4 text-center">
+                          <div className="text-sm text-green-600">Artifact</div>
+                          <div className="mt-1 text-sm font-bold text-green-700">
+                            {primaryArtifact?.filename || "searchable PDF"}
+                          </div>
+                        </div>
+                        <div className="rounded-lg border border-emerald-100 bg-emerald-50 p-4 text-center">
+                          <div className="text-sm text-emerald-600">Progress</div>
+                          <div className="mt-1 text-lg font-bold text-emerald-700">
+                            {typeof job.progress === "number" ? `${Math.round(job.progress)}%` : "100%"}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="bg-slate-50 border rounded-lg p-4 max-h-96 overflow-y-auto whitespace-pre-wrap font-mono text-sm text-slate-700">
-                      {extractedText}
+
+                    <ResultCard
+                      title="Searchable PDF Ready"
+                      description={
+                        primaryArtifact?.filename
+                          ? `${primaryArtifact.filename} is ready to download.`
+                          : "Your searchable PDF is ready to download."
+                      }
+                      onDownload={handleDownload}
+                      onReset={resetAll}
+                      downloadText={isDownloading ? "Preparing Download..." : "Download Searchable PDF"}
+                    />
+                  </div>
+                ) : null}
+
+                {uiState === "failed" ? (
+                  <div className="rounded-xl border bg-white p-8 text-center shadow-sm">
+                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
+                      <ServerCrash className="h-6 w-6" />
                     </div>
-                    <div className="mt-6">
-                      <Button variant="outline" className="w-full" onClick={() => {
-                        setFile(null);
-                        setStatus("idle");
-                        setExtractedText("");
-                      }}>
-                        Start Over
+                    <h3 className="mb-2 text-xl font-bold text-slate-900">OCR Failed</h3>
+                    <p className="mb-6 text-slate-600">
+                      {error?.message || "The processing service could not complete OCR for this PDF."}
+                    </p>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+                      <Button onClick={resetToSetup}>Try Again</Button>
+                      <Button variant="outline" onClick={resetAll}>
+                        Choose Another File
                       </Button>
                     </div>
                   </div>
-                )}
-              </div>
-            )}
+                ) : null}
 
-            {status === "error" && (
-              <div className="rounded-xl border bg-white p-8 text-center shadow-sm">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </div>
-                <h3 className="mb-2 text-xl font-bold text-slate-900">OCR Failed</h3>
-                <p className="mb-6 text-slate-600">{errorMsg}</p>
-                <Button onClick={() => setStatus("idle")}>Try Again</Button>
-              </div>
+                {uiState === "cancelled" ? (
+                  <div className="rounded-xl border bg-white p-8 text-center shadow-sm">
+                    <h3 className="mb-2 text-xl font-bold text-slate-900">OCR Cancelled</h3>
+                    <p className="mb-6 text-slate-600">
+                      {job?.message || "The OCR job was cancelled before the searchable PDF was created."}
+                    </p>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+                      <Button onClick={resetToSetup}>Back to Setup</Button>
+                      <Button variant="outline" onClick={resetAll}>
+                        Choose Another File
+                      </Button>
+                    </div>
+                  </div>
+                ) : null}
+              </>
             )}
           </div>
         </div>
