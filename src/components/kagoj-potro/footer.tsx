@@ -3,9 +3,6 @@ import { TOOLS } from "@/config/tools";
 import Image from "next/image";
 
 export function Footer() {
-  const convertTools = TOOLS.filter((t) => t.category === "Convert");
-  const organizeTools = TOOLS.filter((t) => t.category === "Organize");
-
   return (
     <footer className="border-t bg-slate-900 text-slate-300">
       <div className="container mx-auto max-w-[1200px] px-4 py-16 md:py-20 lg:px-8">
@@ -26,7 +23,6 @@ export function Footer() {
             </Link>
             <p className="text-base text-slate-400 max-w-sm leading-relaxed">
               Simple tools for everyday documents.
-              <br />Fast, private, and 100% browser-based.
             </p>
           </div>
 
@@ -34,12 +30,7 @@ export function Footer() {
           <div className="space-y-6">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider">Tools</h4>
             <ul className="space-y-4 text-sm font-medium">
-              {convertTools.map(tool => (
-                <li key={tool.id}>
-                  <Link href={tool.slug} className="text-slate-400 hover:text-white transition-colors">{tool.name}</Link>
-                </li>
-              ))}
-              {organizeTools.map(tool => (
+              {TOOLS.map(tool => (
                 <li key={tool.id}>
                   <Link href={tool.slug} className="text-slate-400 hover:text-white transition-colors">{tool.name}</Link>
                 </li>
@@ -47,13 +38,26 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* Categories Column */}
+          <div className="space-y-6">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Categories</h4>
+            <ul className="space-y-4 text-sm font-medium">
+              <li>
+                <Link href="/tools?category=convert" className="text-slate-400 hover:text-white transition-colors">Convert</Link>
+              </li>
+              <li>
+                <Link href="/tools?category=organize" className="text-slate-400 hover:text-white transition-colors">Organize</Link>
+              </li>
+              <li>
+                <Link href="/tools" className="text-slate-400 hover:text-white transition-colors">All Tools</Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Info Column */}
           <div className="space-y-6">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider">Info</h4>
             <ul className="space-y-4 text-sm font-medium">
-              <li>
-                <Link href="/tools" className="text-slate-400 hover:text-white transition-colors">All Tools</Link>
-              </li>
               <li>
                 <Link href="#privacy" className="text-slate-400 hover:text-white transition-colors">Privacy</Link>
               </li>

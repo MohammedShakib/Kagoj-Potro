@@ -68,14 +68,14 @@ export function ToolUploadZone({
     <div
       {...getRootProps()}
       className={cn(
-        "relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 transition-all duration-300",
+        "relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-10 py-16 md:py-20 transition-all duration-300",
         isDragActive
           ? "border-primary bg-blue-50/80 shadow-[0_0_40px_-10px_rgba(37,99,235,0.2)] scale-[1.02]"
-          : "border-slate-300 bg-slate-50/50 hover:bg-blue-50/30 hover:border-primary/40"
+          : "border-slate-300 bg-slate-50 hover:bg-blue-50/50 hover:border-primary/50"
       )}
     >
       <input {...getInputProps()} />
-      <div className="mb-6 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 text-primary">
+      <div className="mb-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200/50 text-primary">
         {renderIcon()}
       </div>
       <h3 className="mb-2 text-2xl font-extrabold tracking-tight text-slate-900">{title}</h3>

@@ -1,21 +1,21 @@
-import { Hero } from "@/components/home/hero";
-import { PopularTools } from "@/components/home/popular-tools";
-import { PrivacyStrip } from "@/components/home/privacy-strip";
-import { AllTools } from "@/components/home/all-tools";
-import { HowItWorks } from "@/components/kagoj-potro/how-it-works";
+import { DashboardHeader } from "@/components/home/dashboard-header";
+import { DashboardGrid } from "@/components/home/dashboard-grid";
+import { ComingSoonTools } from "@/components/home/coming-soon-tools";
 import { PrivacySection } from "@/components/home/privacy-section";
-import { FutureToolsCTA } from "@/components/home/future-tools-cta";
+import { WorkYourWay } from "@/components/home/work-your-way";
+import { PlatformGrowth } from "@/components/home/platform-growth";
+import { TrustSection } from "@/components/home/trust-section";
 
 export default function Home() {
   return (
     <>
-      <Hero />
-      <PopularTools />
-      <PrivacyStrip />
-      <AllTools />
-      <HowItWorks />
+      <DashboardHeader />
+      <DashboardGrid />
+      <ComingSoonTools />
       <PrivacySection />
-      <FutureToolsCTA />
+      <WorkYourWay />
+      <PlatformGrowth />
+      <TrustSection />
     </>
   );
 }
