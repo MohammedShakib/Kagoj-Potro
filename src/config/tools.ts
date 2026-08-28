@@ -23,7 +23,7 @@ export const TOOLS: ToolConfig[] = [
     icon: PdfToJpgIcon,
     category: "Convert",
     enabled: true,
-    iconToneClassName: "bg-blue-50 text-blue-600 ring-blue-100",
+    iconToneClassName: "bg-blue-500 text-white ring-blue-200",
     badge: "Convert",
   },
   {
@@ -34,7 +34,7 @@ export const TOOLS: ToolConfig[] = [
     icon: PdfToPngIcon,
     category: "Convert",
     enabled: true,
-    iconToneClassName: "bg-cyan-50 text-cyan-600 ring-cyan-100",
+    iconToneClassName: "bg-cyan-500 text-white ring-cyan-200",
     badge: "Convert",
   },
   {
@@ -45,7 +45,7 @@ export const TOOLS: ToolConfig[] = [
     icon: ImageToPdfIcon,
     category: "Convert",
     enabled: true,
-    iconToneClassName: "bg-indigo-50 text-indigo-600 ring-indigo-100",
+    iconToneClassName: "bg-indigo-500 text-white ring-indigo-200",
     badge: "Convert",
   },
   {
@@ -56,7 +56,7 @@ export const TOOLS: ToolConfig[] = [
     icon: MergePdfIcon,
     category: "Organize",
     enabled: true,
-    iconToneClassName: "bg-violet-50 text-violet-600 ring-violet-100",
+    iconToneClassName: "bg-violet-500 text-white ring-violet-200",
     badge: "Organize",
   },
   {
@@ -67,7 +67,7 @@ export const TOOLS: ToolConfig[] = [
     icon: SplitPdfIcon,
     category: "Organize",
     enabled: true,
-    iconToneClassName: "bg-sky-50 text-sky-700 ring-sky-100",
+    iconToneClassName: "bg-sky-500 text-white ring-sky-200",
     badge: "Organize",
   },
   {
@@ -78,7 +78,7 @@ export const TOOLS: ToolConfig[] = [
     icon: RotatePdfIcon,
     category: "Organize",
     enabled: true,
-    iconToneClassName: "bg-teal-50 text-teal-600 ring-teal-100",
+    iconToneClassName: "bg-teal-500 text-white ring-teal-200",
     badge: "Organize",
   },
 ];
@@ -92,7 +92,7 @@ export const FUTURE_TOOLS: FutureToolConfig[] = [
     category: "Optimize",
     description: "Reduce file size while keeping the document readable.",
     icon: CompressPdfIcon,
-    iconToneClassName: "bg-blue-50 text-blue-600 ring-blue-100",
+    iconToneClassName: "bg-blue-500 text-white ring-blue-200",
   },
   {
     id: "watermark-pdf",
@@ -100,7 +100,7 @@ export const FUTURE_TOOLS: FutureToolConfig[] = [
     category: "Edit",
     description: "Add branded or ownership overlays to your pages.",
     icon: WatermarkIcon,
-    iconToneClassName: "bg-violet-50 text-violet-600 ring-violet-100",
+    iconToneClassName: "bg-violet-500 text-white ring-violet-200",
   },
   {
     id: "page-numbers",
@@ -108,7 +108,7 @@ export const FUTURE_TOOLS: FutureToolConfig[] = [
     category: "Organize",
     description: "Add clean page numbering across the document.",
     icon: PageNumbersIcon,
-    iconToneClassName: "bg-indigo-50 text-indigo-600 ring-indigo-100",
+    iconToneClassName: "bg-indigo-500 text-white ring-indigo-200",
   },
   {
     id: "organize-pdf",
@@ -116,7 +116,7 @@ export const FUTURE_TOOLS: FutureToolConfig[] = [
     category: "Organize",
     description: "Reorder and tidy pages in a focused workspace.",
     icon: OrganizePdfIcon,
-    iconToneClassName: "bg-sky-50 text-sky-700 ring-sky-100",
+    iconToneClassName: "bg-sky-500 text-white ring-sky-200",
   },
   {
     id: "extract-pages",
@@ -124,7 +124,7 @@ export const FUTURE_TOOLS: FutureToolConfig[] = [
     category: "Organize",
     description: "Pull selected pages into new standalone files.",
     icon: ExtractPagesIcon,
-    iconToneClassName: "bg-cyan-50 text-cyan-600 ring-cyan-100",
+    iconToneClassName: "bg-cyan-500 text-white ring-cyan-200",
   },
   {
     id: "protect-pdf",
@@ -132,6 +132,6 @@ export const FUTURE_TOOLS: FutureToolConfig[] = [
     category: "Edit",
     description: "Add document protection controls for sensitive files.",
     icon: ProtectPdfIcon,
-    iconToneClassName: "bg-teal-50 text-teal-700 ring-teal-100",
+    iconToneClassName: "bg-teal-500 text-white ring-teal-200",
   },
 ];

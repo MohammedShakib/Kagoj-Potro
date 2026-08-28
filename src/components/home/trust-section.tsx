@@ -6,17 +6,17 @@ export function TrustSection() {
     {
       title: "Browser Processing",
       icon: LocalProcessingIcon,
-      tone: "bg-blue-50 text-blue-600 ring-blue-100",
+      tone: "bg-blue-500 text-white ring-blue-200",
     },
     {
       title: "No Document Storage",
       icon: NoStorageIcon,
-      tone: "bg-teal-50 text-teal-700 ring-teal-100",
+      tone: "bg-teal-500 text-white ring-teal-200",
     },
     {
       title: "No Signup Required",
       icon: NoAccountIcon,
-      tone: "bg-indigo-50 text-indigo-600 ring-indigo-100",
+      tone: "bg-indigo-500 text-white ring-indigo-200",
     },
   ];
 

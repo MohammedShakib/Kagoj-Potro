@@ -5,9 +5,9 @@ import type { KagojIconProps } from "@/components/kagoj-icons";
 type ToolIconSize = "sm" | "md" | "lg";
 
 const sizeClasses: Record<ToolIconSize, string> = {
-  sm: "h-10 w-10 rounded-xl [&_svg]:h-5 [&_svg]:w-5",
-  md: "h-11 w-11 rounded-xl [&_svg]:h-[22px] [&_svg]:w-[22px]",
-  lg: "h-12 w-12 rounded-2xl [&_svg]:h-6 [&_svg]:w-6",
+  sm: "h-10 w-10 rounded-[1rem] [&_svg]:h-[22px] [&_svg]:w-[22px]",
+  md: "h-12 w-12 rounded-[1.1rem] [&_svg]:h-6 [&_svg]:w-6",
+  lg: "h-14 w-14 rounded-[1.2rem] [&_svg]:h-7 [&_svg]:w-7",
 };
 
 interface ToolIconProps {
@@ -28,7 +28,7 @@ export function ToolIcon({
   return (
     <div
       className={cn(
-        "inline-flex shrink-0 items-center justify-center ring-1 ring-inset transition-all duration-200",
+        "inline-flex shrink-0 items-center justify-center ring-1 ring-inset shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_24px_rgba(15,23,42,0.08)] transition-all duration-200",
         sizeClasses[size],
         toneClassName,
         className,

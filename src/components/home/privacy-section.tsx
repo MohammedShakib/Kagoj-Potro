@@ -7,19 +7,19 @@ export function PrivacySection() {
       title: "Local Processing",
       description: "Calculations happen directly on your device.",
       icon: LocalProcessingIcon,
-      tone: "bg-blue-50 text-blue-600 ring-blue-100",
+      tone: "bg-blue-500 text-white ring-blue-200",
     },
     {
       title: "No Document Storage",
       description: "Your documents are not stored by Kagoj Potro.",
       icon: NoStorageIcon,
-      tone: "bg-teal-50 text-teal-700 ring-teal-100",
+      tone: "bg-teal-500 text-white ring-teal-200",
     },
     {
       title: "No Account Required",
       description: "Use the tools immediately without signup.",
       icon: NoAccountIcon,
-      tone: "bg-indigo-50 text-indigo-600 ring-indigo-100",
+      tone: "bg-indigo-500 text-white ring-indigo-200",
     },
   ];
 

@@ -7,19 +7,19 @@ export function WorkYourWay() {
       title: "Fast",
       description: "Quick document tasks without waiting for uploads or external processing queues.",
       icon: FastIcon,
-      tone: "bg-blue-50 text-blue-600 ring-blue-100",
+      tone: "bg-blue-500 text-white ring-blue-200",
     },
     {
       title: "Private",
       description: "Files stay inside your browser for supported local tools, from start to finish.",
       icon: PrivateIcon,
-      tone: "bg-emerald-50 text-emerald-700 ring-emerald-100",
+      tone: "bg-emerald-500 text-white ring-emerald-200",
     },
     {
       title: "Simple",
       description: "A focused workflow with no account wall, no clutter, and no unnecessary setup.",
       icon: SimpleIcon,
-      tone: "bg-indigo-50 text-indigo-600 ring-indigo-100",
+      tone: "bg-indigo-500 text-white ring-indigo-200",
     },
   ];
 
