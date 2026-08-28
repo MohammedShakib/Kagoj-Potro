@@ -9,15 +9,26 @@ export const metadata: Metadata = {
   description: "Convert PDF pages to high-quality JPG images directly in your browser with Kagoj Potro. Fast, private and no upload required.",
 };
 
+import { Navbar } from "@/components/kagoj-potro/navbar";
+import { Footer } from "@/components/kagoj-potro/footer";
+import { Toaster } from "@/components/ui/sonner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} min-h-screen antialiased`}>
-        {children}
+    <html lang="en" className="scroll-smooth">
+      <body className={inter.className}>
+        <div className="flex min-h-screen flex-col font-sans">
+          <Navbar />
+          <main className="flex-1 bg-white">
+            {children}
+          </main>
+          <Footer />
+          <Toaster position="bottom-center" />
+        </div>
       </body>
     </html>
   );
