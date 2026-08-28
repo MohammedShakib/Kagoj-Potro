@@ -67,10 +67,10 @@ export async function splitPdf(
     const copiedPages = await newPdf.copyPages(sourcePdf, indicesToCopy);
     copiedPages.forEach((page) => newPdf.addPage(page));
 
-    const pdfBytes = await newPdf.save();
+    const pdfBytes = new Uint8Array(await newPdf.save());
     results.push({
       fileName: `${baseName}-extracted.pdf`,
-      blob: new Blob([pdfBytes as any], { type: "application/pdf" }),
+      blob: new Blob([pdfBytes], { type: "application/pdf" }),
     });
 
   } else {
@@ -82,12 +82,12 @@ export async function splitPdf(
       const [copiedPage] = await newPdf.copyPages(sourcePdf, [i]);
       newPdf.addPage(copiedPage);
 
-      const pdfBytes = await newPdf.save();
+      const pdfBytes = new Uint8Array(await newPdf.save());
       const paddedPageNum = (i + 1).toString().padStart(totalPages.toString().length, "0");
       
       results.push({
         fileName: `${baseName}-page-${paddedPageNum}.pdf`,
-        blob: new Blob([pdfBytes as any], { type: "application/pdf" }),
+        blob: new Blob([pdfBytes], { type: "application/pdf" }),
       });
     }
   }

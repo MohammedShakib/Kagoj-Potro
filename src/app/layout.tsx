@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Footer } from "@/components/kagoj-potro/footer";
+import { Navbar } from "@/components/kagoj-potro/navbar";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PDF to JPG Converter | Kagoj Potro",
-  description: "Convert PDF pages to high-quality JPG images directly in your browser with Kagoj Potro. Fast, private and no upload required.",
+  title: "Kagoj Potro | Private Browser Document Tools",
+  description:
+    "Convert, merge, split, and organize documents directly in your browser with Kagoj Potro. Fast, private, and built for everyday document work.",
 };
-
-import { Navbar } from "@/components/kagoj-potro/navbar";
-import { Footer } from "@/components/kagoj-potro/footer";
-import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
   children,

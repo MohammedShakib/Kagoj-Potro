@@ -35,6 +35,6 @@ export async function rotatePdf(
     }
   }
 
-  const pdfBytes = await pdfDoc.save();
-  return new Blob([pdfBytes as any], { type: "application/pdf" });
+  const pdfBytes = new Uint8Array(await pdfDoc.save());
+  return new Blob([pdfBytes], { type: "application/pdf" });
 }

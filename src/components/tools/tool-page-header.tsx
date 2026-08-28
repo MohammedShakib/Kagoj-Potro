@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronRight, ShieldCheck } from "lucide-react";
 import { ToolConfig } from "@/types/tools";
+import { ToolIcon } from "@/components/kagoj-icons/tool-icon";
 
 interface ToolPageHeaderProps {
   tool: ToolConfig;
@@ -22,9 +23,7 @@ export function ToolPageHeader({ tool }: ToolPageHeaderProps) {
       </nav>
 
       <div className="flex flex-col items-center justify-center space-y-5">
-        <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ring-1 ring-slate-100 shadow-sm ${tool.colorAccent ? tool.colorAccent.replace('bg-', 'bg-').replace('/10', '/10').replace(' text-', ' text-') : "bg-primary/10 text-primary"}`}>
-          <tool.icon className="h-8 w-8" />
-        </div>
+        <ToolIcon icon={tool.icon} toneClassName={tool.iconToneClassName} size="lg" />
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
           {tool.name}
         </h1>

@@ -2,6 +2,7 @@ import { TOOLS } from "@/config/tools";
 import { ToolConfig } from "@/types/tools";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { ToolIcon } from "@/components/kagoj-icons/tool-icon";
 
 const ToolGrid = ({ tools }: { tools: ToolConfig[] }) => (
   <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -12,9 +13,7 @@ const ToolGrid = ({ tools }: { tools: ToolConfig[] }) => (
         className="group flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
       >
         <div className="flex items-start justify-between">
-          <div className={`flex h-12 w-12 items-center justify-center rounded-xl transition-colors ${tool.colorAccent ? tool.colorAccent.replace('bg-', 'bg-').replace('/10', '/10 group-hover:bg-').replace(' text-', '/20 text-') : "bg-primary/5 text-primary group-hover:bg-primary/10"}`}>
-            <tool.icon className="h-6 w-6" />
-          </div>
+          <ToolIcon icon={tool.icon} toneClassName={tool.iconToneClassName} />
           <ArrowRight className="h-5 w-5 text-slate-300 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-1 group-hover:text-primary" />
         </div>
         <div>

@@ -1,8 +1,30 @@
-import { Zap, ShieldCheck, Minimize2 } from "lucide-react";
+import { FastIcon, PrivateIcon, SimpleIcon } from "@/components/kagoj-icons";
+import { ToolIcon } from "@/components/kagoj-icons/tool-icon";
 
 export function WorkYourWay() {
+  const items = [
+    {
+      title: "Fast",
+      description: "Quick document tasks without waiting for uploads or external processing queues.",
+      icon: FastIcon,
+      tone: "bg-blue-50 text-blue-600 ring-blue-100",
+    },
+    {
+      title: "Private",
+      description: "Files stay inside your browser for supported local tools, from start to finish.",
+      icon: PrivateIcon,
+      tone: "bg-emerald-50 text-emerald-700 ring-emerald-100",
+    },
+    {
+      title: "Simple",
+      description: "A focused workflow with no account wall, no clutter, and no unnecessary setup.",
+      icon: SimpleIcon,
+      tone: "bg-indigo-50 text-indigo-600 ring-indigo-100",
+    },
+  ];
+
   return (
-    <section className="px-4 py-16 md:py-24 bg-slate-50 border-t border-slate-100">
+    <section className="border-t border-slate-100 bg-slate-50 px-4 py-16 md:py-20">
       <div className="container mx-auto max-w-[1240px]">
         <div className="mb-12 text-center">
           <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-4">Work your way</h2>
@@ -11,36 +33,22 @@ export function WorkYourWay() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="flex flex-col items-center text-center p-8 rounded-2xl bg-white border border-slate-200 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
-            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-              <Zap className="h-7 w-7" />
+        <div className="grid gap-4 md:grid-cols-3">
+          {items.map((item) => (
+            <div
+              key={item.title}
+              className="rounded-[1.35rem] border border-slate-200 bg-white p-6 text-center shadow-[0_1px_2px_rgba(15,23,42,0.03)] transition-all hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <ToolIcon
+                icon={item.icon}
+                toneClassName={item.tone}
+                size="lg"
+                className="mx-auto mb-5"
+              />
+              <h3 className="mb-2 text-lg font-semibold text-slate-900">{item.title}</h3>
+              <p className="mx-auto max-w-xs text-sm leading-6 text-slate-600">{item.description}</p>
             </div>
-            <h3 className="mb-3 text-xl font-bold text-slate-900">Fast</h3>
-            <p className="text-slate-500 leading-relaxed">
-              Quick document tasks without waiting for server uploads. Processing happens instantly on your device.
-            </p>
-          </div>
-          
-          <div className="flex flex-col items-center text-center p-8 rounded-2xl bg-white border border-slate-200 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
-            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-green-50 text-green-600">
-              <ShieldCheck className="h-7 w-7" />
-            </div>
-            <h3 className="mb-3 text-xl font-bold text-slate-900">Private</h3>
-            <p className="text-slate-500 leading-relaxed">
-              Files stay inside your browser for all supported local tools. We never see or store your documents.
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center text-center p-8 rounded-2xl bg-white border border-slate-200 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
-            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-              <Minimize2 className="h-7 w-7" />
-            </div>
-            <h3 className="mb-3 text-xl font-bold text-slate-900">Simple</h3>
-            <p className="text-slate-500 leading-relaxed">
-              No account, no unnecessary workflow, no complicated settings. Just select a tool and get the job done.
-            </p>
-          </div>
+          ))}
         </div>
       </div>
     </section>

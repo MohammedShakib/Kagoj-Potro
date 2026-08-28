@@ -1,15 +1,18 @@
-import { FileArchive, Wand2, Type, Grip } from "lucide-react";
+import { FUTURE_TOOLS } from "@/config/tools";
+import { ToolIcon } from "@/components/kagoj-icons/tool-icon";
 
 export function PlatformGrowth() {
+  const showcaseTools = FUTURE_TOOLS.slice(0, 4);
+
   return (
-    <section className="px-4 py-16 md:py-32 bg-white">
+    <section className="bg-white px-4 py-16 md:py-20">
       <div className="container mx-auto max-w-[1240px]">
-        <div className="rounded-[2.5rem] bg-blue-50/50 p-8 md:p-16 border border-blue-100 relative overflow-hidden">
-          <div className="absolute top-0 right-0 -mr-20 -mt-20 h-96 w-96 rounded-full bg-blue-100/50 blur-3xl opacity-50" />
+        <div className="relative overflow-hidden rounded-[2rem] border border-blue-100 bg-blue-50/60 p-8 md:p-12">
+          <div className="absolute -right-16 -top-16 h-72 w-72 rounded-full bg-blue-100/70 blur-3xl" />
           
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center relative z-10">
             <div className="space-y-6">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
+              <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl lg:leading-[1.05]">
                 More document tools. <br />
                 <span className="text-primary">One simple workspace.</span>
               </h2>
@@ -17,52 +20,41 @@ export function PlatformGrowth() {
                 Kagoj Potro is growing into a complete toolkit for everyday PDF and image tasks. We&apos;re actively building new features to help you work faster.
               </p>
               
-              <ul className="space-y-4 pt-4">
-                <li className="flex items-center gap-3 text-slate-700 font-semibold">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
-                    <FileArchive className="h-4 w-4" />
-                  </div>
-                  Compress PDFs
-                </li>
-                <li className="flex items-center gap-3 text-slate-700 font-semibold">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
-                    <Wand2 className="h-4 w-4" />
-                  </div>
-                  Add watermarks
-                </li>
-                <li className="flex items-center gap-3 text-slate-700 font-semibold">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
-                    <Type className="h-4 w-4" />
-                  </div>
-                  Add page numbers
-                </li>
-                <li className="flex items-center gap-3 text-slate-700 font-semibold">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
-                    <Grip className="h-4 w-4" />
-                  </div>
-                  Organize pages
-                </li>
+              <ul className="space-y-3 pt-2">
+                {showcaseTools.map((tool) => (
+                  <li key={tool.id} className="flex items-center gap-3 text-slate-700">
+                    <ToolIcon icon={tool.icon} toneClassName={tool.iconToneClassName} size="sm" />
+                    <span className="font-semibold">{tool.name}</span>
+                  </li>
+                ))}
               </ul>
             </div>
 
             <div className="relative flex items-center justify-center">
-              <div className="relative grid grid-cols-2 gap-4 w-full max-w-md">
-                <div className="flex flex-col gap-4 translate-y-8">
-                  <div className="rounded-2xl border-4 border-white bg-blue-100 p-6 shadow-xl shadow-blue-900/5 aspect-square flex items-center justify-center text-blue-500 hover:scale-105 transition-transform duration-300">
-                    <FileArchive className="h-16 w-16" />
-                  </div>
-                  <div className="rounded-2xl border-4 border-white bg-indigo-100 p-6 shadow-xl shadow-blue-900/5 aspect-square flex items-center justify-center text-indigo-500 hover:scale-105 transition-transform duration-300">
-                    <Wand2 className="h-16 w-16" />
-                  </div>
+              <div className="relative w-full max-w-md rounded-[1.75rem] border border-white/70 bg-white/70 p-5 shadow-[0_24px_50px_rgba(37,99,235,0.08)] backdrop-blur">
+                <div className="grid grid-cols-2 gap-4">
+                  {showcaseTools.map((tool, index) => (
+                    <div
+                      key={tool.id}
+                      className={`rounded-[1.35rem] border border-slate-200 bg-white p-4 shadow-sm ${
+                        index % 2 === 0 ? "translate-y-4" : ""
+                      }`}
+                    >
+                      <div className="mb-6 flex items-center justify-between">
+                        <ToolIcon icon={tool.icon} toneClassName={tool.iconToneClassName} size="lg" />
+                        <div className="flex gap-1">
+                          <span className="h-2 w-2 rounded-full bg-slate-200" />
+                          <span className="h-2 w-2 rounded-full bg-slate-200" />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="h-2 w-16 rounded-full bg-slate-200" />
+                        <div className="h-2 w-12 rounded-full bg-slate-100" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex flex-col gap-4">
-                  <div className="rounded-2xl border-4 border-white bg-teal-100 p-6 shadow-xl shadow-blue-900/5 aspect-square flex items-center justify-center text-teal-500 hover:scale-105 transition-transform duration-300">
-                    <Type className="h-16 w-16" />
-                  </div>
-                  <div className="rounded-2xl border-4 border-white bg-violet-100 p-6 shadow-xl shadow-blue-900/5 aspect-square flex items-center justify-center text-violet-500 hover:scale-105 transition-transform duration-300">
-                    <Grip className="h-16 w-16" />
-                  </div>
-                </div>
+                <div className="pointer-events-none absolute inset-x-10 top-1/2 hidden h-px -translate-y-1/2 bg-[linear-gradient(90deg,transparent,rgba(59,130,246,0.22),transparent)] lg:block" />
               </div>
             </div>
           </div>

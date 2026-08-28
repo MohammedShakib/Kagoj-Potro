@@ -21,6 +21,6 @@ export async function mergePdfs(
     copiedPages.forEach((page) => mergedPdf.addPage(page));
   }
 
-  const pdfBytes = await mergedPdf.save();
-  return new Blob([pdfBytes as any], { type: "application/pdf" });
+  const pdfBytes = new Uint8Array(await mergedPdf.save());
+  return new Blob([pdfBytes], { type: "application/pdf" });
 }

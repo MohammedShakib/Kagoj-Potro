@@ -2,6 +2,7 @@ import { TOOLS, POPULAR_TOOLS } from "@/config/tools";
 import { ToolConfig } from "@/types/tools";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { ToolIcon } from "@/components/kagoj-icons/tool-icon";
 
 export function PopularTools() {
   const popularToolsConfig = POPULAR_TOOLS.map(id => TOOLS.find(t => t.id === id)).filter(Boolean) as ToolConfig[];
@@ -16,9 +17,7 @@ export function PopularTools() {
               href={tool.slug}
               className="group relative flex flex-col gap-5 rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
             >
-              <div className={`flex h-14 w-14 items-center justify-center rounded-xl transition-colors ${tool.colorAccent ? tool.colorAccent.replace('bg-', 'bg-').replace('/10', '/10 group-hover:bg-').replace(' text-', '/20 text-') : "bg-primary/5 text-primary group-hover:bg-primary/10"}`}>
-                <tool.icon className="h-7 w-7" />
-              </div>
+              <ToolIcon icon={tool.icon} toneClassName={tool.iconToneClassName} size="lg" />
               <div>
                 <h3 className="mb-2 text-lg font-bold tracking-tight text-slate-900 group-hover:text-primary transition-colors">
                   {tool.name}
