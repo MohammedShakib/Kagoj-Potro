@@ -22,7 +22,7 @@ export interface Quadrilateral {
   bottomLeft: Point;
 }
 
-export type ScanFilter = "original" | "document" | "grayscale" | "bw" | "enhanced";
+export type ScanFilter = "original" | "magic" | "document" | "grayscale" | "bw" | "enhanced";
 
 export interface ScanPage {
   id: string;

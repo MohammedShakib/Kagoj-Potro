@@ -17,6 +17,7 @@ interface PageReviewProps {
 
 const FILTERS: { id: ScanFilter; label: string }[] = [
   { id: "original", label: "Original" },
+  { id: "magic", label: "Magic Color" },
   { id: "document", label: "Document" },
   { id: "grayscale", label: "Grayscale" },
   { id: "bw", label: "B & W" },
@@ -77,6 +78,7 @@ export function PageReview({
                 className={`h-10 w-8 rounded-sm object-cover ${
                   f.id === 'bw' ? 'grayscale contrast-[2] brightness-110' :
                   f.id === 'grayscale' ? 'grayscale' :
+                  f.id === 'magic' ? 'contrast-150 saturate-150 brightness-110' :
                   f.id === 'enhanced' ? 'saturate-150 contrast-125' :
                   f.id === 'document' ? 'contrast-125 brightness-110' :
                   ''

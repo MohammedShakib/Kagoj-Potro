@@ -254,6 +254,43 @@ async function transformPerspective(blob: Blob, corners: any, filter: string) {
         cv.cvtColor(hsv, dst, cv.COLOR_HSV2RGB, 0);
         cv.cvtColor(dst, dst, cv.COLOR_RGB2RGBA, 0);
         hsv.delete(); planes.delete(); s.delete(); v.delete();
+      } else if (filter === "magic") {
+        // "Magic Color" - flat illumination and high contrast color
+        cv.cvtColor(dst, dst, cv.COLOR_RGBA2RGB, 0);
+        
+        // Background estimation for illumination flattening
+        const bg = new cv.Mat();
+        cv.GaussianBlur(dst, bg, new cv.Size(55, 55), 0, 0, cv.BORDER_DEFAULT);
+        
+        const dstFloat = new cv.Mat();
+        const bgFloat = new cv.Mat();
+        dst.convertTo(dstFloat, cv.CV_32FC3);
+        bg.convertTo(bgFloat, cv.CV_32FC3);
+        
+        const resultFloat = new cv.Mat();
+        cv.divide(dstFloat, bgFloat, resultFloat, 255);
+        resultFloat.convertTo(dst, cv.CV_8UC3);
+        
+        // Increase saturation and contrast
+        const hsv = new cv.Mat();
+        cv.cvtColor(dst, hsv, cv.COLOR_RGB2HSV, 0);
+        const planes = new cv.MatVector();
+        cv.split(hsv, planes);
+        const s = planes.get(1);
+        s.convertTo(s, -1, 1.5, 0); // Boost saturation
+        planes.set(1, s);
+        cv.merge(planes, hsv);
+        cv.cvtColor(hsv, dst, cv.COLOR_HSV2RGB, 0);
+        
+        // Slight sharpening
+        const blurred = new cv.Mat();
+        cv.GaussianBlur(dst, blurred, new cv.Size(0, 0), 3);
+        cv.addWeighted(dst, 1.5, blurred, -0.5, 0, dst);
+        
+        cv.cvtColor(dst, dst, cv.COLOR_RGB2RGBA, 0);
+        
+        bg.delete(); dstFloat.delete(); bgFloat.delete(); resultFloat.delete();
+        hsv.delete(); planes.delete(); s.delete(); blurred.delete();
       }
     } catch (filterErr) {
       console.warn("Filter application failed, returning warped image", filterErr);
