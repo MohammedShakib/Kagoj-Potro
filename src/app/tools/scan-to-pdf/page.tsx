@@ -22,6 +22,7 @@ export default function ScanToPdfPage() {
   const [state, setState] = useState<ScannerState | "complete">("idle");
   const [pages, setPages] = useState<ScanPage[]>([]);
   const [activePageId, setActivePageId] = useState<string | null>(null);
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
   const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const engineRef = useRef<ScannerEngine | null>(null);
@@ -111,8 +112,12 @@ export default function ScanToPdfPage() {
     setState(pages.length > 0 ? "review" : "idle");
   };
 
-  const handleCapture = async (blob: Blob) => {
-    await processNewCapture(blob);
+  const handleCapture = async (blobs: Blob[]) => {
+    if (blobs.length === 1) {
+      await processNewCapture(blobs[0]);
+    } else if (blobs.length > 1) {
+      await processBatchCaptures(blobs);
+    }
   };
 
   const processNewCapture = async (blob: Blob) => {
@@ -228,6 +233,26 @@ export default function ScanToPdfPage() {
     setState("idle");
   };
 
+  const handleDragStart = (idx: number) => {
+    setDraggedIdx(idx);
+  };
+
+  const handleDragEnter = (idx: number) => {
+    if (draggedIdx === null || draggedIdx === idx) return;
+    setPages(prev => {
+      const newPages = [...prev];
+      const draggedItem = newPages[draggedIdx];
+      newPages.splice(draggedIdx, 1);
+      newPages.splice(idx, 0, draggedItem);
+      return newPages;
+    });
+    setDraggedIdx(idx);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIdx(null);
+  };
+
   if (state === "camera") {
     return <CameraView onCapture={handleCapture} onCancel={handleCancelCamera} />;
   }
@@ -303,7 +328,6 @@ export default function ScanToPdfPage() {
                     className="hidden" 
                     accept="image/*"
                     multiple
-                    capture="environment"
                     onChange={handleFileSelect}
                   />
                 </div>
@@ -318,7 +342,12 @@ export default function ScanToPdfPage() {
                     {pages.map((page, idx) => (
                       <div 
                         key={page.id} 
-                        className="group relative aspect-[3/4] overflow-hidden rounded-lg border bg-slate-100 cursor-pointer"
+                        draggable
+                        onDragStart={() => handleDragStart(idx)}
+                        onDragEnter={() => handleDragEnter(idx)}
+                        onDragEnd={handleDragEnd}
+                        onDragOver={(e) => e.preventDefault()}
+                        className={`group relative aspect-[3/4] overflow-hidden rounded-lg border bg-slate-100 cursor-pointer ${draggedIdx === idx ? 'opacity-40' : 'opacity-100'} transition-opacity`}
                         onClick={() => {
                           setActivePageId(page.id);
                           setState("page_review");

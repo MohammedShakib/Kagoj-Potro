@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { X, Camera as CameraIcon, Zap, ZapOff, Image as ImageIcon } from "lucide-react";
 
 interface CameraViewProps {
-  onCapture: (blob: Blob) => void;
+  onCapture: (blobs: Blob[]) => void;
   onCancel: () => void;
 }
 
@@ -14,6 +14,7 @@ export function CameraView({ onCapture, onCancel }: CameraViewProps) {
   const streamRef = useRef<MediaStream | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [capturedBlobs, setCapturedBlobs] = useState<Blob[]>([]);
 
   useEffect(() => {
     let mounted = true;
@@ -81,7 +82,7 @@ export function CameraView({ onCapture, onCancel }: CameraViewProps) {
     
     canvas.toBlob((blob) => {
       if (blob) {
-        onCapture(blob);
+        setCapturedBlobs(prev => [...prev, blob]);
       } else {
         setError("Failed to capture image.");
       }
@@ -111,10 +112,10 @@ export function CameraView({ onCapture, onCancel }: CameraViewProps) {
               type="file" 
               className="hidden" 
               accept="image/*"
-              capture="environment"
+              multiple
               onChange={(e) => {
                 if (e.target.files && e.target.files.length > 0) {
-                  onCapture(e.target.files[0]);
+                  onCapture(Array.from(e.target.files));
                 }
               }}
             />
@@ -175,9 +176,10 @@ export function CameraView({ onCapture, onCancel }: CameraViewProps) {
               type="file" 
               className="hidden" 
               accept="image/*"
+              multiple
               onChange={(e) => {
                 if (e.target.files && e.target.files.length > 0) {
-                  onCapture(e.target.files[0]);
+                  onCapture(Array.from(e.target.files));
                 }
               }}
             />
@@ -191,8 +193,20 @@ export function CameraView({ onCapture, onCancel }: CameraViewProps) {
             <div className="h-16 w-16 rounded-full bg-white transition-transform active:scale-90" />
           </button>
 
-          {/* Spacer to balance the layout since flash isn't consistently supported yet */}
-          <div className="h-12 w-12" />
+          {/* Done / Counter */}
+          <div className="h-12 w-12 flex items-center justify-center">
+            {capturedBlobs.length > 0 && (
+              <button 
+                onClick={() => onCapture(capturedBlobs)}
+                className="relative flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg transition-transform active:scale-95"
+              >
+                <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold">
+                  {capturedBlobs.length}
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

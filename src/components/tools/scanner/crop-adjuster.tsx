@@ -126,7 +126,7 @@ export function CropAdjuster({ previewUrl, initialCorners, onDone, onRetake }: C
         let y = newPoint.y;
         
         // Prevent corners from crossing each other
-        const padding = Math.max(10, imageSize.width * 0.05); 
+        const padding = 10; 
         
         if (activeHandle === 'topLeft') {
           x = Math.min(x, prev.topRight.x - padding, prev.bottomRight.x - padding);
@@ -249,6 +249,25 @@ export function CropAdjuster({ previewUrl, initialCorners, onDone, onRetake }: C
               </div>
             );
           })}
+
+          {/* Magnifier / Loupe */}
+          {activeHandle && (
+            <div 
+              className="absolute pointer-events-none z-50 h-24 w-24 overflow-hidden rounded-full border-4 border-white shadow-[0_0_15px_rgba(0,0,0,0.5)] bg-black"
+              style={{
+                left: toDisplay(corners[activeHandle]).x - 48,
+                top: toDisplay(corners[activeHandle]).y - 120, // 120px above the finger
+                backgroundImage: `url(${previewUrl})`,
+                backgroundSize: `${displaySize.width * 2}px ${displaySize.height * 2}px`, // 2x zoom
+                backgroundPosition: `-${toDisplay(corners[activeHandle]).x * 2 - 48}px -${toDisplay(corners[activeHandle]).y * 2 - 48}px`,
+                backgroundRepeat: 'no-repeat'
+              }}
+            >
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_0_2px_white]" />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
