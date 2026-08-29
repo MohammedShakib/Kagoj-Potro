@@ -69,8 +69,17 @@ export function PageReview({
                   : "border-slate-800 bg-slate-900 text-slate-400 hover:border-slate-700"
               }`}
             >
-              {/* Fake thumbnail for visual indication */}
-              <div className={`h-10 w-8 rounded-sm bg-white/10 ${f.id === 'bw' ? 'grayscale contrast-150' : f.id === 'grayscale' ? 'grayscale' : ''}`} />
+              <img 
+                src={previewUrl}
+                alt=""
+                className={`h-10 w-8 rounded-sm object-cover ${
+                  f.id === 'bw' ? 'grayscale contrast-[2] brightness-110' :
+                  f.id === 'grayscale' ? 'grayscale' :
+                  f.id === 'enhanced' ? 'saturate-150 contrast-125' :
+                  f.id === 'document' ? 'contrast-125 brightness-110' :
+                  ''
+                }`} 
+              />
               <span className="text-[10px] font-medium uppercase tracking-wider">{f.label}</span>
             </button>
           ))}
