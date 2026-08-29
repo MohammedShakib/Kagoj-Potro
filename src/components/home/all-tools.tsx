@@ -41,6 +41,7 @@ export function AllTools() {
   const editTools = TOOLS.filter((t) => t.category === "Edit");
   const optimizeTools = TOOLS.filter((t) => t.category === "Optimize");
   const securityTools = TOOLS.filter((t) => t.category === "Security");
+  const imageTools = TOOLS.filter((t) => t.category === "Images");
 
   return (
     <section className="px-4 py-16 md:py-24 bg-slate-50">
@@ -94,6 +95,16 @@ export function AllTools() {
                 <div className="h-px flex-1 bg-slate-200"></div>
               </h3>
               <ToolGrid tools={securityTools} />
+            </div>
+          )}
+
+          {imageTools.length > 0 && (
+            <div>
+              <h3 className="mb-6 flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-slate-900">
+                Images
+                <div className="h-px flex-1 bg-slate-200"></div>
+              </h3>
+              <ToolGrid tools={imageTools} />
             </div>
           )}
         </div>
