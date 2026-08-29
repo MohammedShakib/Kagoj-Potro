@@ -261,11 +261,13 @@ export function useProcessingJob() {
 
       if (!cancelledJob || isTerminalStatus(cancelledJob.status)) {
         setJob(
-          cancelledJob ?? {
-            ...job,
-            message: "The processing job was cancelled.",
-            status: "cancelled",
-          },
+          cancelledJob 
+            ? { ...job, ...cancelledJob } 
+            : {
+                ...job,
+                message: "The processing job was cancelled.",
+                status: "cancelled",
+              },
         );
         setUiState(cancelledJob ? mapJobStatusToUiState(cancelledJob.status) : "cancelled");
         setError(null);
