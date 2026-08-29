@@ -15,7 +15,7 @@ import { ScannerEngine } from "@/lib/cv/scanner-engine";
 import { convertImagesToPdf } from "@/lib/pdf/image-to-pdf";
 import { ResultCard } from "@/components/tools/result-card";
 import { useRouter } from "next/navigation";
-import { sanitizeFileName } from "@/lib/utils";
+import { sanitizeFileName } from "@/lib/utils/file-name";
 
 export default function ScanToPdfPage() {
   const tool = TOOLS.find((t) => t.id === "scan-to-pdf")!;

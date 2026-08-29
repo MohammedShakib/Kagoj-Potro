@@ -1,4 +1,6 @@
-import cv from "@techstark/opencv-js";
+// @ts-ignore
+declare const cv: any;
+declare function importScripts(...urls: string[]): void;
 
 export type WorkerCommand = 
   | { type: "PING" }
@@ -13,22 +15,30 @@ export type WorkerResponse =
 
 let isReady = false;
 
+// Load OpenCV script dynamically
+try {
+  importScripts("/lib/opencv.js");
+} catch (err) {
+  console.warn("Failed to importScripts. Maybe running in an environment without it?", err);
+}
+
 // Initialize OpenCV
-if (cv instanceof Promise) {
-  cv.then(() => {
-    isReady = true;
-    postMessage({ type: "READY" });
-  });
-} else {
-  // Try waiting for onRuntimeInitialized
-  if (typeof cv.getBuildInformation === "function") {
-    isReady = true;
-    postMessage({ type: "READY" });
-  } else {
-    cv.onRuntimeInitialized = () => {
+if (typeof cv !== "undefined") {
+  if (cv instanceof Promise) {
+    cv.then(() => {
       isReady = true;
       postMessage({ type: "READY" });
-    };
+    });
+  } else {
+    if (typeof cv.getBuildInformation === "function") {
+      isReady = true;
+      postMessage({ type: "READY" });
+    } else {
+      cv.onRuntimeInitialized = () => {
+        isReady = true;
+        postMessage({ type: "READY" });
+      };
+    }
   }
 }
 

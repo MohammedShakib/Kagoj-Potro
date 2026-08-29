@@ -4,6 +4,7 @@ export type ScannerState =
   | "captured"
   | "adjusting"
   | "review"
+  | "page_review"
   | "processing"
   | "ready"
   | "complete"
