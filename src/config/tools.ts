@@ -34,7 +34,7 @@ export const TOOLS: ToolConfig[] = [
     name: "Scan to PDF",
     slug: "/tools/scan-to-pdf",
     description: "Scan documents with your camera and turn them into a clean multi-page PDF.",
-    iconSrc: "/icons/scan-to-pdf.jpg",
+    iconSrc: "/Icons/scan-to-pdf.png",
     iconAlt: "Scan to PDF icon",
     iconToneClassName: IMAGE_ICON_TONE,
     category: "Images",
