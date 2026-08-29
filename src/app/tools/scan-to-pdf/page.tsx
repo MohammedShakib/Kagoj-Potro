@@ -42,10 +42,64 @@ export default function ScanToPdfPage() {
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      await processNewCapture(e.target.files[0]);
+      const files = Array.from(e.target.files);
+      if (files.length === 1) {
+        await processNewCapture(files[0]);
+      } else {
+        await processBatchCaptures(files);
+      }
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
+    }
+  };
+
+  const processBatchCaptures = async (blobs: Blob[]) => {
+    setState("processing");
+    try {
+      if (engineRef.current) {
+        await engineRef.current.waitUntilReady();
+      }
+
+      const newPages: ScanPage[] = [];
+      
+      for (let i = 0; i < blobs.length; i++) {
+        const blob = blobs[i];
+        const id = crypto.randomUUID();
+        const previewUrl = URL.createObjectURL(blob);
+        
+        let page: ScanPage = {
+          id,
+          originalBlob: blob,
+          processedBlob: blob,
+          previewUrl,
+          rotation: 0,
+          filter: "original"
+        };
+
+        if (engineRef.current) {
+          const detectedCorners = await engineRef.current.detectDocument(blob);
+          if (detectedCorners) {
+            page.corners = detectedCorners;
+            try {
+              const processedBlob = await engineRef.current.transformPerspective(blob, detectedCorners, "original");
+              URL.revokeObjectURL(page.previewUrl);
+              page.processedBlob = processedBlob;
+              page.previewUrl = URL.createObjectURL(processedBlob);
+            } catch (err) {
+              console.error("Batch transform failed for page", i, err);
+            }
+          }
+        }
+        
+        newPages.push(page);
+      }
+
+      setPages(prev => [...prev, ...newPages]);
+      setState("review");
+    } catch (err) {
+      console.error(err);
+      setState(pages.length > 0 ? "review" : "idle");
     }
   };
 
@@ -201,6 +255,7 @@ export default function ScanToPdfPage() {
           onRotate={handleRotatePage}
           onRetake={handleRetakePage}
           onDelete={handleDeletePage}
+          onCrop={() => setState("adjusting")}
           onDone={() => setState("review")}
         />
       </div>
@@ -247,6 +302,7 @@ export default function ScanToPdfPage() {
                     ref={fileInputRef} 
                     className="hidden" 
                     accept="image/*"
+                    multiple
                     capture="environment"
                     onChange={handleFileSelect}
                   />
