@@ -41,65 +41,81 @@ export function CropAdjuster({ previewUrl, initialCorners, onDone, onRetake }: C
     }
   }, [initialCorners, initFullCorners]);
 
+  const updateDisplaySize = useCallback(() => {
+    if (imgRef.current) {
+      const rect = imgRef.current.getBoundingClientRect();
+      setDisplaySize({ width: rect.width, height: rect.height });
+    }
+  }, []);
+
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget;
     setImageSize({ width: img.naturalWidth, height: img.naturalHeight });
-    setDisplaySize({ width: img.width, height: img.height });
-  };
-
-  const updateDisplaySize = () => {
-    if (imgRef.current) {
-      setDisplaySize({ width: imgRef.current.width, height: imgRef.current.height });
-    }
+    updateDisplaySize();
   };
 
   useEffect(() => {
     window.addEventListener("resize", updateDisplaySize);
     return () => window.removeEventListener("resize", updateDisplaySize);
-  }, []);
+  }, [updateDisplaySize]);
 
   // Map from original image coordinates to display coordinates
-  const toDisplay = (p: Point) => {
+  const toDisplay = useCallback((p: Point) => {
     if (imageSize.width === 0 || displaySize.width === 0) return { x: 0, y: 0 };
     return {
       x: (p.x / imageSize.width) * displaySize.width,
       y: (p.y / imageSize.height) * displaySize.height
     };
-  };
+  }, [imageSize, displaySize]);
 
   // Map from display coordinates to original image coordinates
-  const toImage = (p: Point) => {
+  const toImage = useCallback((p: Point) => {
     if (imageSize.width === 0 || displaySize.width === 0) return { x: 0, y: 0 };
     return {
       x: Math.max(0, Math.min(imageSize.width, (p.x / displaySize.width) * imageSize.width)),
       y: Math.max(0, Math.min(imageSize.height, (p.y / displaySize.height) * imageSize.height))
     };
-  };
+  }, [imageSize, displaySize]);
 
   const handlePointerDown = (handle: keyof Quadrilateral) => (e: React.PointerEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setActiveHandle(handle);
   };
 
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!activeHandle || !corners || !containerRef.current) return;
-    
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    setCorners(prev => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        [activeHandle]: toImage({ x, y })
-      };
-    });
-  };
+  useEffect(() => {
+    if (!activeHandle) return;
 
-  const handlePointerUp = () => {
-    setActiveHandle(null);
-  };
+    const onPointerMove = (e: PointerEvent) => {
+      e.preventDefault();
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      setCorners(prev => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          [activeHandle]: toImage({ x, y })
+        };
+      });
+    };
+
+    const onPointerUp = () => {
+      setActiveHandle(null);
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: false });
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
+
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
+    };
+  }, [activeHandle, toImage]);
 
   if (!corners) {
     return (
@@ -141,9 +157,6 @@ export function CropAdjuster({ previewUrl, initialCorners, onDone, onRetake }: C
         <div 
           ref={containerRef}
           className="relative inline-block touch-none select-none"
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerLeave={handlePointerUp}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 

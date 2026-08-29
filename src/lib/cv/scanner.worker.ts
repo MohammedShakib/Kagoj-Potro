@@ -225,18 +225,45 @@ async function transformPerspective(blob: Blob, corners: any, filter: string) {
     dst = new cv.Mat();
     cv.warpPerspective(src, dst, M, new cv.Size(maxWidth, maxHeight), cv.INTER_LINEAR, cv.BORDER_CONSTANT, new cv.Scalar());
     
-    // Apply filters
-    if (filter === "grayscale" || filter === "bw") {
-      cv.cvtColor(dst, dst, cv.COLOR_RGBA2GRAY, 0);
-      if (filter === "bw") {
-        cv.adaptiveThreshold(dst, dst, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2);
+    // Apply filters safely
+    try {
+      if (filter === "grayscale" || filter === "bw") {
+        cv.cvtColor(dst, dst, cv.COLOR_RGBA2GRAY, 0);
+        if (filter === "bw") {
+          cv.adaptiveThreshold(dst, dst, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2);
+        }
+        cv.cvtColor(dst, dst, cv.COLOR_GRAY2RGBA, 0);
+      } else if (filter === "document") {
+        // simple document enhancement
+        const alpha = 1.2;
+        const beta = 10;
+        dst.convertTo(dst, -1, alpha, beta);
+      } else if (filter === "enhanced") {
+        cv.cvtColor(dst, dst, cv.COLOR_RGBA2RGB, 0);
+        const hsv = new cv.Mat();
+        cv.cvtColor(dst, hsv, cv.COLOR_RGB2HSV, 0);
+        const planes = new cv.MatVector();
+        cv.split(hsv, planes);
+        const s = planes.get(1);
+        const v = planes.get(2);
+        s.convertTo(s, -1, 1.2, 0);
+        v.convertTo(v, -1, 1.1, 0);
+        planes.set(1, s);
+        planes.set(2, v);
+        cv.merge(planes, hsv);
+        cv.cvtColor(hsv, dst, cv.COLOR_HSV2RGB, 0);
+        cv.cvtColor(dst, dst, cv.COLOR_RGB2RGBA, 0);
+        hsv.delete(); planes.delete(); s.delete(); v.delete();
       }
+    } catch (filterErr) {
+      console.warn("Filter application failed, returning warped image", filterErr);
+    }
+    
+    // Ensure the matrix is 4-channel RGBA before creating ImageData
+    if (dst.channels() === 1) {
       cv.cvtColor(dst, dst, cv.COLOR_GRAY2RGBA, 0);
-    } else if (filter === "document") {
-      // simple document enhancement
-      const alpha = 1.2;
-      const beta = 10;
-      dst.convertTo(dst, -1, alpha, beta);
+    } else if (dst.channels() === 3) {
+      cv.cvtColor(dst, dst, cv.COLOR_RGB2RGBA, 0);
     }
     
     srcTri.delete();
