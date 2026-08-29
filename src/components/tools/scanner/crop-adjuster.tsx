@@ -20,6 +20,7 @@ export function CropAdjuster({ previewUrl, initialCorners, onDone, onRetake }: C
   
   const [corners, setCorners] = useState<Quadrilateral | null>(null);
   const [activeHandle, setActiveHandle] = useState<keyof Quadrilateral | null>(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   // Initialize corners to full image if none provided
   const initFullCorners = useCallback(() => {
@@ -55,8 +56,17 @@ export function CropAdjuster({ previewUrl, initialCorners, onDone, onRetake }: C
   };
 
   useEffect(() => {
+    if (!imgRef.current) return;
+    const observer = new ResizeObserver(() => {
+      updateDisplaySize();
+    });
+    observer.observe(imgRef.current);
     window.addEventListener("resize", updateDisplaySize);
-    return () => window.removeEventListener("resize", updateDisplaySize);
+    
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateDisplaySize);
+    };
   }, [updateDisplaySize]);
 
   // Map from original image coordinates to display coordinates
@@ -80,6 +90,19 @@ export function CropAdjuster({ previewUrl, initialCorners, onDone, onRetake }: C
   const handlePointerDown = (handle: keyof Quadrilateral) => (e: React.PointerEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    if (containerRef.current && corners) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const p = toDisplay(corners[handle]);
+      const handleCenterX = rect.left + p.x;
+      const handleCenterY = rect.top + p.y;
+      
+      setDragOffset({
+        x: e.clientX - handleCenterX,
+        y: e.clientY - handleCenterY
+      });
+    }
+    
     setActiveHandle(handle);
   };
 
@@ -90,14 +113,38 @@ export function CropAdjuster({ previewUrl, initialCorners, onDone, onRetake }: C
       e.preventDefault();
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      
+      const targetDisplayX = e.clientX - rect.left - dragOffset.x;
+      const targetDisplayY = e.clientY - rect.top - dragOffset.y;
       
       setCorners(prev => {
         if (!prev) return prev;
+        
+        const newPoint = toImage({ x: targetDisplayX, y: targetDisplayY });
+        
+        let x = newPoint.x;
+        let y = newPoint.y;
+        
+        // Prevent corners from crossing each other
+        const padding = Math.max(10, imageSize.width * 0.05); 
+        
+        if (activeHandle === 'topLeft') {
+          x = Math.min(x, prev.topRight.x - padding, prev.bottomRight.x - padding);
+          y = Math.min(y, prev.bottomLeft.y - padding, prev.bottomRight.y - padding);
+        } else if (activeHandle === 'topRight') {
+          x = Math.max(x, prev.topLeft.x + padding, prev.bottomLeft.x + padding);
+          y = Math.min(y, prev.bottomRight.y - padding, prev.bottomLeft.y - padding);
+        } else if (activeHandle === 'bottomRight') {
+          x = Math.max(x, prev.bottomLeft.x + padding, prev.topLeft.x + padding);
+          y = Math.max(y, prev.topRight.y + padding, prev.topLeft.y + padding);
+        } else if (activeHandle === 'bottomLeft') {
+          x = Math.min(x, prev.bottomRight.x - padding, prev.topRight.x - padding);
+          y = Math.max(y, prev.topLeft.y + padding, prev.topRight.y + padding);
+        }
+        
         return {
           ...prev,
-          [activeHandle]: toImage({ x, y })
+          [activeHandle]: { x, y }
         };
       });
     };
@@ -115,7 +162,7 @@ export function CropAdjuster({ previewUrl, initialCorners, onDone, onRetake }: C
       window.removeEventListener("pointerup", onPointerUp);
       window.removeEventListener("pointercancel", onPointerUp);
     };
-  }, [activeHandle, toImage]);
+  }, [activeHandle, dragOffset, toImage, imageSize]);
 
   if (!corners) {
     return (

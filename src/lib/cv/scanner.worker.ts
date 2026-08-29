@@ -17,7 +17,7 @@ let isReady = false;
 
 // Load OpenCV script dynamically
 try {
-  importScripts("/lib/opencv.js");
+  importScripts("https://docs.opencv.org/4.8.0/opencv.js");
 } catch (err) {
   console.warn("Failed to importScripts. Maybe running in an environment without it?", err);
 }
