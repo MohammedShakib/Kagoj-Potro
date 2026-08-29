@@ -285,21 +285,6 @@ export function ExtractPagesIcon(props: KagojIconProps) {
   );
 }
 
-export function ProtectPdfIcon(props: KagojIconProps) {
-  return (
-    <BaseIcon {...props}>
-      <Sheet x={6.6} y={5} w={13.2} h={19.6} />
-      <path
-        d="M21.7 15.1c2 0 3.8-.6 5.1-1.7 0 5-1.8 8-5.1 9.9-3.4-1.9-5.2-4.9-5.2-9.9 1.3 1.1 3.2 1.7 5.2 1.7Z"
-        fill="currentColor"
-        fillOpacity="0.18"
-      />
-      <path d="M21.7 18.1v3.4" />
-      <path d="M20 17.2v-.5a1.7 1.7 0 0 1 3.4 0v.5" />
-    </BaseIcon>
-  );
-}
-
 export function LocalProcessingIcon(props: KagojIconProps) {
   return (
     <BaseIcon {...props}>
@@ -422,21 +407,6 @@ export function CropPdfIcon(props: KagojIconProps) {
   );
 }
 
-export function UnlockPdfIcon(props: KagojIconProps) {
-  return (
-    <BaseIcon {...props}>
-      <Sheet x={6.6} y={5} w={13.2} h={19.6} />
-      <path
-        d="M21.7 15.1c2 0 3.8-.6 5.1-1.7 0 5-1.8 8-5.1 9.9-3.4-1.9-5.2-4.9-5.2-9.9 1.3 1.1 3.2 1.7 5.2 1.7Z"
-        fill="currentColor"
-        fillOpacity="0.18"
-      />
-      <path d="M21.7 18.1v3.4" />
-      <path d="M20 17.2v-1.5a1.7 1.7 0 0 1 3.4 0" />
-    </BaseIcon>
-  );
-}
-
 export function FillPdfIcon(props: KagojIconProps) {
   return (
     <BaseIcon {...props}>
@@ -482,7 +452,6 @@ export const KAGOJ_ICONS: Record<string, ComponentType<KagojIconProps>> = {
   pageNumbers: PageNumbersIcon,
   organizePdf: OrganizePdfIcon,
   extractPages: ExtractPagesIcon,
-  protectPdf: ProtectPdfIcon,
   localProcessing: LocalProcessingIcon,
   noStorage: NoStorageIcon,
   noAccount: NoAccountIcon,
@@ -492,7 +461,6 @@ export const KAGOJ_ICONS: Record<string, ComponentType<KagojIconProps>> = {
   signPdf: SignPdfIcon,
   editPdf: EditPdfIcon,
   cropPdf: CropPdfIcon,
-  unlockPdf: UnlockPdfIcon,
   fillPdf: FillPdfIcon,
   ocrPdf: OcrPdfIcon,
 };

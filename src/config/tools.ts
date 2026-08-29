@@ -1,8 +1,6 @@
 import type { FutureToolConfig, ToolConfig } from "@/types/tools";
-import { KAGOJ_ICONS } from "@/components/kagoj-icons";
 
 const IMAGE_ICON_TONE = "bg-transparent ring-0 shadow-none";
-const SVG_ICON_TONE = "bg-blue-50 text-blue-600 ring-blue-100";
 
 export const TOOLS: ToolConfig[] = [
   // --- CONVERT ---
@@ -211,8 +209,9 @@ export const TOOLS: ToolConfig[] = [
     name: "Protect PDF",
     slug: "/tools/protect-pdf",
     description: "Encrypt your PDF with a password.",
-    icon: KAGOJ_ICONS.protectPdf,
-    iconToneClassName: SVG_ICON_TONE,
+    iconSrc: "/Icons/protect-pdf.png",
+    iconAlt: "Protect PDF icon",
+    iconToneClassName: IMAGE_ICON_TONE,
     category: "Security",
     enabled: true,
     badge: "Security",
@@ -222,8 +221,9 @@ export const TOOLS: ToolConfig[] = [
     name: "Unlock PDF",
     slug: "/tools/unlock-pdf",
     description: "Remove password protection from your PDF.",
-    icon: KAGOJ_ICONS.unlockPdf,
-    iconToneClassName: SVG_ICON_TONE,
+    iconSrc: "/Icons/unlock-pdf.png",
+    iconAlt: "Unlock PDF icon",
+    iconToneClassName: IMAGE_ICON_TONE,
     category: "Security",
     enabled: true,
     badge: "Security",

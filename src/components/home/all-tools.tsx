@@ -38,6 +38,9 @@ const ToolGrid = ({ tools }: { tools: ToolConfig[] }) => (
 export function AllTools() {
   const convertTools = TOOLS.filter((t) => t.category === "Convert");
   const organizeTools = TOOLS.filter((t) => t.category === "Organize");
+  const editTools = TOOLS.filter((t) => t.category === "Edit");
+  const optimizeTools = TOOLS.filter((t) => t.category === "Optimize");
+  const securityTools = TOOLS.filter((t) => t.category === "Security");
 
   return (
     <section className="px-4 py-16 md:py-24 bg-slate-50">
@@ -63,6 +66,36 @@ export function AllTools() {
             </h3>
             <ToolGrid tools={organizeTools} />
           </div>
+
+          {editTools.length > 0 && (
+            <div>
+              <h3 className="mb-6 flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-slate-900">
+                Edit
+                <div className="h-px flex-1 bg-slate-200"></div>
+              </h3>
+              <ToolGrid tools={editTools} />
+            </div>
+          )}
+
+          {optimizeTools.length > 0 && (
+            <div>
+              <h3 className="mb-6 flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-slate-900">
+                Optimize
+                <div className="h-px flex-1 bg-slate-200"></div>
+              </h3>
+              <ToolGrid tools={optimizeTools} />
+            </div>
+          )}
+
+          {securityTools.length > 0 && (
+            <div>
+              <h3 className="mb-6 flex items-center gap-4 text-sm font-bold uppercase tracking-widest text-slate-900">
+                Security
+                <div className="h-px flex-1 bg-slate-200"></div>
+              </h3>
+              <ToolGrid tools={securityTools} />
+            </div>
+          )}
         </div>
       </div>
     </section>
