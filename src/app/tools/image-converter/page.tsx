@@ -14,6 +14,7 @@ import { convertImages, ImageFormat, ConvertedFile } from "@/lib/images/convert-
 import { createAndDownloadZip } from "@/lib/download/create-zip";
 import { Settings2, ArrowRight } from "lucide-react";
 import { RelatedTools } from "@/components/tools/related-tools";
+import { Switch } from "@/components/ui/switch";
 
 export default function ImageConverterPage() {
   const tool = TOOLS.find((t) => t.id === "image-converter")!;
@@ -24,9 +25,10 @@ export default function ImageConverterPage() {
   const [convertedFiles, setConvertedFiles] = useState<ConvertedFile[]>([]);
 
   // Settings
-  const [targetFormat, setTargetFormat] = useState<ImageFormat>("jpeg");
+  const [targetFormat, setTargetFormat] = useState<ImageFormat>("png");
   const [quality, setQuality] = useState(90);
   const [background, setBackground] = useState("#ffffff");
+  const [cleanAiShade, setCleanAiShade] = useState(true);
 
   const handleFilesSelect = (selectedFiles: File[]) => {
     if (selectedFiles.length > 0) {
@@ -58,6 +60,7 @@ export default function ImageConverterPage() {
           format: targetFormat,
           quality: quality / 100,
           background: background,
+          cleanupMode: cleanAiShade ? "ai-shade" : "none",
         },
         (current, total) => {
           setProgress(Math.round((current / total) * 100));
@@ -211,6 +214,17 @@ export default function ImageConverterPage() {
                       />
                     </div>
                   )}
+
+                  <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white px-3 py-2.5">
+                    <label htmlFor="clean-ai-shade" className="text-sm font-medium text-slate-700">
+                      Clean AI shade
+                    </label>
+                    <Switch
+                      id="clean-ai-shade"
+                      checked={cleanAiShade}
+                      onCheckedChange={setCleanAiShade}
+                    />
+                  </div>
 
                   {targetFormat === "jpeg" && (
                     <div>
